@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>funstuff</title>
+	</head>
+	<body>
+		<ul class="test">
+			<% for(var i=0; i<results.length; i++) {%>
+				<li class="result">
+					<span><%= results[i].name %></span>
+					<span><%= results[i].field %></span>
+				</li>
+			<% } %>
+		</ul>
+	</body>
+</html>
