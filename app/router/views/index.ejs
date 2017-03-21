@@ -14,7 +14,7 @@
 		<script src="js/app.js"></script>
 
 	</head>
-<body ng-app='snippetApp' ng-controller="SnippetMain">
+<body ng-app='snippetApp' ng-controller="SnippetMain as vm">
     <div class="collapse bg-inverse" id="navbarHeader">
         <div class="container">
             <div class="row">
@@ -27,7 +27,13 @@
         </div>
     </div>
     <div class="container">
-        
+	<form>
+		<div class="form-group spotify-search">
+			<label>Search Song or Artist</label>
+			<input type="text" class="form-control" ng-model="vm.SearchQuery"/>
+			<button style="float:right; margin-top: 1em;" type="button" ng-click="vm.Search()" class="btn btn-primary">Search</button>
+		</div>
+	</form>      
     </div>
         <style class="ng-scope">
             .navbar {
@@ -37,6 +43,10 @@
             .open-stack-login {
                 margin-top: 1em;
             }
+
+	    .spotify-search{
+		margin-top: 1em;
+		}
 
             .jumbotron {
                 padding-top: 6rem;
