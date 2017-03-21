@@ -10,6 +10,25 @@ function initapp (app) {
 	app.get('/', getHome)
 	app.get('/test', getTest)
 	app.post('/test', postTest)
+	app.post('/api/spotify/search', spotifySearch)
+}
+
+function spotifySearch(req, res){
+console.log(req.body);
+     var req_obj = req.body;
+     var SpotifyWebApi = require('spotify-web-api-node');
+
+// credentials are optional
+     var spotifyApi = new SpotifyWebApi();
+
+spotifyApi.searchTracks(req_obj.searchQuery)
+  .then(function(data) {
+    res.json(data.body);
+  }, function(err) {
+    console.log('FUCK', err);
+	res.json('error');
+  });
+
 }
 
 function getHome(req, res) {

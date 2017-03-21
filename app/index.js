@@ -8,6 +8,8 @@ var app = express();
 
 // bodyparser for reading body of req
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
+
 
 // embedded javascript for template engine
 app.set('view engine', 'ejs')

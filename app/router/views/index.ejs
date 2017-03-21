@@ -27,13 +27,37 @@
         </div>
     </div>
     <div class="container">
-	<form>
+	<div class="row">
+		<div class="col-sm-12">
+<form>
 		<div class="form-group spotify-search">
-			<label>Search Song or Artist</label>
+			<label>Search Song</label>
 			<input type="text" class="form-control" ng-model="vm.SearchQuery"/>
-			<button style="float:right; margin-top: 1em;" type="button" ng-click="vm.Search()" class="btn btn-primary">Search</button>
+			<button style="float:right; margin-top: 1em; margin-bottom: 1em;" type="button" ng-click="vm.Search()" class="btn btn-primary">Search</button>
 		</div>
-	</form>      
+		<div style="margin-top:1em;" class="results-table">
+<table class="table table-sm">
+  <thead class="thead-inverse">
+    <tr>
+      <th>Artist</th>
+	<th>Song</th>
+      <th>Popularity</th>
+      <th>Preview URL</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat="song in vm.SongResults.tracks.items">
+	<th>{{song.artists[0].name}}</th>
+      <td scope="row">{{song.name}}</td>
+      <td>{{song.popularity}}</td>
+      <td>{{song.preview_url}}</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+	</form>
+</div>
+</div>      
     </div>
         <style class="ng-scope">
             .navbar {
