@@ -9,13 +9,13 @@
 		<script src="/bower_components/jquery/dist/jquery.js"></script>
 		<script src="/bower_components/bootstrap/dist/js/bootstrap.js"></script>
 		<script src="/bower_components/angular/angular.js"></script>
-		<script src="js/controllers/SnippetMain.js"></script>
 		<script src="js/controllers/SnippetLogin.js"></script>
+		<script src="js/controllers/SnippetMain.js"></script>
 		<script src="js/services/SnippetService.js"></script>
 		<script src="js/app.js"></script>
 
 	</head>
-<body ng-app='snippetApp' ng-controller="SnippetMain as vm">
+<body ng-app='snippetApp' ng-controller="SnippetLogin as vm">
     <div class="collapse bg-inverse" id="navbarHeader">
         <div class="container">
             <div class="row">
@@ -27,43 +27,41 @@
             <a href="#" class="navbar-brand">Snippet</a>
         </div>
     </div>
-    <div class="container">
+    <div class="container" style="margin-top: 1em;">
 	<div class="row">
-		<div class="col-sm-12">
+		<div class="col-sm-6 mx-auto">
 <form>
-		<div class="form-group spotify-search">
-			<label>Search Song</label>
-			<input type="text" class="form-control" ng-model="vm.SearchQuery"/>
-			<button style="float:right; margin-top: 1em; margin-bottom: 1em;" type="button" ng-click="vm.Search()" class="btn btn-primary">Search</button>
-		</div>
-		<div style="margin-top:1em;" class="results-table">
-<table class="table table-sm">
-  <thead class="thead-inverse">
-    <tr>
-      <th>Artist</th>
-	<th>Song</th>
-      <th>Popularity</th>
-      <th>Preview URL</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr ng-repeat="song in vm.SongResults.tracks.items">
-	<th>{{song.artists[0].name}}</th>
-      <td scope="row">{{song.name}}</td>
-      <td>{{song.popularity}}</td>
-      <td>{{song.preview_url}}</td>
-    </tr>
-  </tbody>
-</table>
-</div>
+		<form class="form-signin">
+	<button style="margin-bottom: .5em;" class="btn btn-primary btn-block fb-btn" type="button">LOG IN WITH FACEBOOK</button>
+        <input style="margin-bottom: .5em;" type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+        <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+        <button style="margin-top: .5em;" class="btn btn-success btn-block login-btn" type="button">LOG IN</button>
+      </form>
 	</form>
 </div>
 </div>      
     </div>
-        <style class="ng-scope">
+        <style>
             .navbar {
                 margin-bottom: 0;
             }
+
+		.fb-btn{
+			font-size: .85em;
+			font-weight: 500;
+		}
+
+		.login-btn{
+			font-size: .85em;
+			font-weight: 500;
+		}
+
+		.form-control{
+			border-radius: 0em;
+		}
+		.btn{
+			border-radius: 1.25em;
+		}
 
             .open-stack-login {
                 margin-top: 1em;
@@ -123,6 +121,8 @@
                 footer p {
                     margin-bottom: .25rem;
                 }
+
+
         </style>
 
 </body>

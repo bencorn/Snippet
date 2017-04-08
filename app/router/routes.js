@@ -8,6 +8,7 @@ var db = require('../models/mongodb')
 
 function initapp (app) {
 	app.get('/', getHome)
+	app.get('/login',getLogin)
 	app.get('/test', getTest)
 	app.post('/test', postTest)
 	app.post('/api/spotify/search', spotifySearch)
@@ -29,6 +30,11 @@ spotifyApi.searchTracks(req_obj.searchQuery)
 	res.json('error');
   });
 
+}
+
+function getLogin(req, res){
+	console.log('Login page route.')
+	res.render("login.ejs")
 }
 
 function getHome(req, res) {
