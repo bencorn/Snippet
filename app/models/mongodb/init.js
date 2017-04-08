@@ -17,9 +17,10 @@ function connectionTest(callback) {
 }
 
 function write(collection_name, data, callback) {
+	//inserts data = {key:value} into collection_name
 	try {
 		connectionTest(function(err,db){
-			db.collection(collection_name).save(data, function (err, result) {
+			db.collection(collection_name).insertOne(data, function (err, result) {
 				if (err) {
 					throw err
 				} else {
@@ -33,7 +34,8 @@ function write(collection_name, data, callback) {
 	}
 }
 
-function read(collection_name,callback) {
+function read(collection_name, criteria, callback) {
+	// will match all criteria {key:value} in collection_name
 	try {
 		connectionTest(function(err,db){
 			db.collection(collection_name).find().toArray(function(err, results) {
@@ -50,7 +52,47 @@ function read(collection_name,callback) {
 	}
 }
 
+function update(collection_name, criteria, update, callback) {
+	// will find all criteria {key:value} in collection_name and perform update functions
+	try {
+		connectionTest(function(err,db){
+			db.collection(collection_name).findOneAndUpdate(criteria, update, function(err, results) {
+				if (err) {
+					throw err
+				} else {
+					callback(false,results)
+				}
+			})
+		})
+	}
+	catch (err) {
+		console.log("db error:", err)
+	}
+}
+
+function remove(collection_name, criteria, callback) {
+	// will find all criteria {key:value} in collection_name and remove the record
+	try {
+		connectionTest(function(err,db){
+			db.collection(collection_name).findOneAndDelete(criteria, function(err, results) {
+				if (err) {
+					throw err
+				} else {
+					callback(false,results)
+				}
+			})
+		})
+	}
+	catch (err) {
+		console.log("db error:", err)
+	}
+}
+
+
+
 module.exports = {
 	write,
-	read
+	read,
+	update,
+	remove
 }
