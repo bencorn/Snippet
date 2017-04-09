@@ -1,17 +1,27 @@
 
-//index file for app
+// Requires
 
 var path = require('path')
 var bodyParser = require('body-parser');
 var express = require('express');
 var app = express();
+var passport = require('passport');
+var LocalStrategy = require('passport-local');
+var FacebookStrategy = require('passport-facebook');
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://127.0.0.1:27017');
 
-// bodyparser for reading body of req
+var db = mongoose.connection;
+
+// Middleware
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
+// Passport Init
+app.use(passport.initialize());
+app.use(passport.session());
 
-// embedded javascript for template engine
+// View Engine
 app.set('view engine', 'ejs')
 // directory for serving views
 app.set('views', path.join(__dirname, 'router/views'))
@@ -20,9 +30,7 @@ app.use('/bower_components', express.static(path.join(__dirname, 'bower_componen
 app.use('/js', express.static(path.join(__dirname, 'js/')))
 app.use(express.static(path.join(__dirname, 'public')));
 
-
-
-// initialize router
+// Include Routes
 require('./router').init(app);
 
 module.exports = app;
