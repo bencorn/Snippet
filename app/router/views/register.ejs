@@ -31,10 +31,11 @@
 	<div class="row">
 		<div class="col-sm-6 mx-auto">
 		<form class="form-signin">
-			<button style="margin-bottom: 1em; " class="btn btn-primary btn-block fb-btn" type="button">LOG IN WITH FACEBOOK</button>
+			<button style="margin-bottom: 1em; " class="btn btn-primary btn-block fb-btn" type="button">SIGN UP WITH FACEBOOK</button>
+			<input ng-model="vm.User.Name" style="margin-bottom: .5em;" type="text" id="inputName" class="form-control" placeholder="Full Name" required autofocus>
 			<input ng-model="vm.User.Email" style="margin-bottom: .5em;" type="email" id="inputEmail" class="form-control" placeholder="Email address" required>
 			<input ng-model="vm.User.Password" type="password" id="inputPassword" class="form-control" placeholder="Password" required>
-			<button ng-click="vm.loginUser()" style="margin-top: 1em;" class="btn btn-success btn-block login-btn" type="button">LOG IN</button>
+			<button ng-click="vm.createUser()" style="margin-top: 1em;" class="btn btn-success btn-block login-btn" type="button">SIGN UP</button>
 	  </form>
 </div>
 </div>      

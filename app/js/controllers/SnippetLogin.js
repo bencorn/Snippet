@@ -2,6 +2,7 @@ angular.module('SnippetLogin', []).controller('SnippetLogin', function($scope, $
 
 	vm = this;
 	
+	// Create Snippet User
 	vm.createUser = function(){
 		var req = {
 			'username': vm.User.Email,
@@ -12,8 +13,22 @@ angular.module('SnippetLogin', []).controller('SnippetLogin', function($scope, $
 		
 		$http.post('/api/user/register', req)
 			.then(function(res){
-				
+				// TO BE IMPLEMENTED	
 			});
+	}
+	
+	// Login Snippet User
+	vm.loginUser = function(){
+		var req = {
+			'username': vm.User.Email,
+			'password': vm.User.Password
+		}
+		
+		$http.post('/api/user/login', req)
+			.then(function(res){
+				// TO BE IMPLEMENTED
+			});
+		
 	}
 
 
