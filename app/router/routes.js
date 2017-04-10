@@ -5,15 +5,22 @@
 //initialize mongoDB read & push
 var db = require('../models/mongodb');
 var User = require('../models/user');
+var passport = require('passport');
+var LocalStrategy = require('passport-local');
+var FacebookStrategy = require('passport-facebook');
 
 function initapp (app) {
 	app.get('/', getHome);
 	app.get('/register', getRegister);
 	app.get('/login',getLogin);
 	app.get('/test', getTest);
+	app.get('/auth/facebook',passport.authenticate('facebook'));
+	app.get('/auth/facebook/callback',
+		passport.authenticate('facebook', {successRedirect: '/', failureRedirect:'/login'}));
 	app.post('/test', postTest);
 	app.post('/api/spotify/search', spotifySearch);
 	app.post('/api/user/register', registerUser);
+	app.post('/api/user/login', loginUser);
 }
 
 function spotifySearch(req, res){
@@ -31,6 +38,14 @@ spotifyApi.searchTracks(req_obj.searchQuery)
 	res.json('error');
   });
 
+}
+
+function loginUser(req, res){
+	var username = req.body.username;
+	var password = req.body.password;
+	
+	// Implement Login with Passport (Normal, Not Facebook)
+	
 }
 
 function registerUser(req, res){
