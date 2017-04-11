@@ -10,12 +10,14 @@ var LocalStrategy = require('passport-local');
 var FacebookStrategy = require('passport-facebook');
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://127.0.0.1:27017');
+var cookieParser = require('cookie-parser');
 
 var db = mongoose.connection;
 
 // Middleware
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
+app.use(cookieParser());
 
 // Passport Init
 app.use(passport.initialize());

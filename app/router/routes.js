@@ -4,6 +4,8 @@
 
 //initialize mongoDB read & push
 var db = require('../models/mongodb');
+var auth = require('../models/authentication');
+var randomstring = require('randomstring');
 var User = require('../models/user');
 var passport = require('passport');
 var LocalStrategy = require('passport-local');
@@ -13,11 +15,11 @@ function initapp (app) {
 	app.get('/', getHome);
 	app.get('/register', getRegister);
 	app.get('/login',getLogin);
-	app.get('/test', getTest);
+	// app.get('/test', getTest);
 	app.get('/auth/facebook',passport.authenticate('facebook'));
 	app.get('/auth/facebook/callback',
 		passport.authenticate('facebook', {successRedirect: '/', failureRedirect:'/login'}));
-	app.post('/test', postTest);
+	// app.post('/test', postTest);
 	app.post('/api/spotify/search', spotifySearch);
 	app.post('/api/user/register', registerUser);
 	app.post('/api/user/login', loginUser);
@@ -40,12 +42,24 @@ spotifyApi.searchTracks(req_obj.searchQuery)
 
 }
 
-function loginUser(req, res){
+function loginUser(req, res, next){
 	var username = req.body.username;
 	var password = req.body.password;
 	
 	// Implement Login with Passport (Normal, Not Facebook)
 	
+	console.log(username)
+	console.log(password)
+
+	var name = username.split("@")[0]
+	var str = randomstring.generate(32)
+	auth.setCookie(name, str, function(err) {
+		if(!err) {
+			res.cookie('Snippet', str)
+			console.log(str)
+			res.redirect('/');
+		}
+	})
 }
 
 function registerUser(req, res){
@@ -79,23 +93,33 @@ function getRegister(req, res){
 }
 
 function getHome(req, res) {
-	res.render("index.ejs")
-}
-
-function getTest(req, res) {
-	db.read('test', function(err,results){
-		if(!err){
-			res.render('test.ejs', {results: results})
+	console.log(req.cookies.Snippet)
+	auth.checkCookies(req.cookies.Snippet, function(err, valid, results) {
+		if(valid){
+			// cookie is up to date
+			res.render("index.ejs")
+		}
+		else{
+			// cookie is stale, redirect to login
+			res.redirect("/login");
 		}
 	})
 }
 
-function postTest(req, res) {
-	db.write('test',req.body, function (err,results) {
-		if (!err) {
-			res.redirect('/')
-		}
-	})
-}
+// function getTest(req, res) {
+// 	db.read('test', function(err,results){
+// 		if(!err){
+// 			res.render('test.ejs', {results: results})
+// 		}
+// 	})
+// }
+
+// function postTest(req, res) {
+// 	db.write('test',req.body, function (err,results) {
+// 		if (!err) {
+// 			res.redirect('/')
+// 		}
+// 	})
+// }
 
 module.exports = initapp

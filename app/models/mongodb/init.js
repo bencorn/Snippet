@@ -34,8 +34,8 @@ function write(collection_name, data, callback) {
 	}
 }
 
-function read(collection_name, criteria, callback) {
-	// will match all criteria {key:value} in collection_name
+function read(collection_name, callback) {
+	// will return all in collection_name
 	try {
 		connectionTest(function(err,db){
 			db.collection(collection_name).find().toArray(function(err, results) {
@@ -52,11 +52,29 @@ function read(collection_name, criteria, callback) {
 	}
 }
 
-function update(collection_name, criteria, update, callback) {
-	// will find all criteria {key:value} in collection_name and perform update functions
+function find(collection_name, criteria, callback) {
+	// will match all criteria {key:value} in collection_name
 	try {
 		connectionTest(function(err,db){
-			db.collection(collection_name).findOneAndUpdate(criteria, update, function(err, results) {
+			db.collection(collection_name).findOne(criteria , function(err, results) {
+				if (err) {
+					throw err
+				} else {
+					callback(false,results)
+				}
+			})
+		})
+	}
+	catch (err) {
+		console.log("db error:", err)
+	}
+}
+
+function update(collection_name, criteria, update, callback) {
+	// will find all criteria {key:value} in collection_name and perform update functions (set: changes fields)
+	try {
+		connectionTest(function(err,db){
+			db.collection(collection_name).findOneAndUpdate(criteria, {$set: update}, function(err, results) {
 				if (err) {
 					throw err
 				} else {
@@ -93,6 +111,7 @@ function remove(collection_name, criteria, callback) {
 module.exports = {
 	write,
 	read,
+	find,
 	update,
 	remove
 }
