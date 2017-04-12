@@ -42,7 +42,7 @@ spotifyApi.searchTracks(req_obj.searchQuery)
 
 }
 
-function loginUser(req, res, next){
+function loginUser(req, res){
 	var username = req.body.username;
 	var password = req.body.password;
 	
@@ -57,7 +57,8 @@ function loginUser(req, res, next){
 		if(!err) {
 			res.cookie('Snippet', str)
 			console.log(str)
-			res.redirect('/');
+			res.statusCode = 301
+			res.end()
 		}
 	})
 }
