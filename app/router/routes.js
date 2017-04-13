@@ -57,8 +57,7 @@ function loginUser(req, res){
 		if(!err) {
 			res.cookie('Snippet', str)
 			console.log(str)
-			res.statusCode = 301
-			res.end()
+			res.send('/')
 		}
 	})
 }
@@ -78,10 +77,14 @@ function registerUser(req, res){
 	
 	User.createUser(newUser, function(err, user){
 		if(err) throw err;
-		console.log(user);
-		
-		// Redirect Somewhere, not sure where yet
-		res.redirect('/');
+		var str = randomstring.generate(32)
+		auth.setCookie(username, str, function (err) {
+		    if (!err) {
+		        res.cookie('Snippet', str)
+		        console.log(str)
+		        res.send('/')
+		    }
+		})
 	});
 };
 

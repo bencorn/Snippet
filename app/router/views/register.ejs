@@ -32,13 +32,19 @@
 		<div class="col-sm-6 mx-auto">
 		<form class="form-signin">
 			<button style="margin-bottom: 1em; " class="btn btn-primary btn-block fb-btn" type="button">SIGN UP WITH FACEBOOK</button>
+			<hr>
 			<input ng-model="vm.User.Name" style="margin-bottom: .5em;" type="text" id="inputName" class="form-control" placeholder="Full Name" required autofocus>
 			<input ng-model="vm.User.Email" style="margin-bottom: .5em;" type="email" id="inputEmail" class="form-control" placeholder="Email address" required>
 			<input ng-model="vm.User.Password" type="password" id="inputPassword" class="form-control" placeholder="Password" required>
 			<button ng-click="vm.createUser()" style="margin-top: 1em;" class="btn btn-success btn-block login-btn" type="button">SIGN UP</button>
 	  </form>
 </div>
-</div>      
+</div>  
+		  <div class="row">
+		<div class="col-xs-12 mx-auto text-center">
+			Already have an account? <a style="color:#1ed760" href="/login">Log in</a>
+		</div>
+	  </div>     
     </div>
         <style>
             .navbar {
@@ -49,6 +55,8 @@
 			background-color: #3b5998;
 			font-size: .85em;
 			font-weight: 500;
+			letter-spacing: 1px;
+			height: 48px !important;
 		}
 		
 		.fb-btn:hover{
@@ -63,6 +71,8 @@
 			font-size: .85em;
 			font-weight: 500;
 			background-color: #2ebd59;
+			letter-spacing: 1px;
+			height: 48px !important;
 		}
 
 		.form-control{
