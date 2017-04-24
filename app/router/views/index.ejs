@@ -5,26 +5,68 @@
     <title>Snippet</title>
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
     <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css">
+	<link rel="stylesheet" href="js/jquery.fullpage.css">
     <script src="/bower_components/jquery/dist/jquery.js"></script>
     <script src="/bower_components/bootstrap/dist/js/bootstrap.js"></script>
     <script src="/bower_components/angular/angular.js"></script>
+	<script src="js/jquery.fullpage.extensions.min.js"></script>
     <script src="js/controllers/SnippetMain.js"></script>
 	<script src="js/controllers/SnippetLogin.js"></script>
     <script src="js/services/SnippetService.js"></script>
     <script src="js/app.js"></script>
 </head>
 <body ng-app="snippetApp" ng-controller="SnippetMain as vm">
-    <div class="collapse bg-inverse" id="navbarHeader">
-        <div class="container">
-            <div class="row">
-            </div>
-        </div>
-    </div>
-    <div class="navbar navbar-inverse bg-inverse">
-        <div class="container justify-content-between">
-            <a href="#" class="navbar-brand">Snippet</a>
-        </div>
-    </div>
+<div id="fullpage">
+	<section class="vertical-scrolling">
+		<div class="horizontal-scrolling snippet">
+			<div class="container">
+				<div class="row">
+					<div style="margin-top: 4em;" class="col-sm-12">
+						<h4 style="font-weight: 100; color: white;">Snippets</h4>
+						<div class="card">
+						  <ul class="list-group list-group-flush">
+							<li class="list-group-item">
+								<img src="https://www.music-bazaar.com/album-images/vol30/1110/1110503/2977081-big/Lions-In-The-Wild-Single-cover.jpg" class="img-circle img-fluid" width="64" height="64">
+								<div class="snippet-details">
+									<span class="lead">Benjamin Corn</span><br>
+									<span class="text-muted">11m ago</span>
+								</div>
+							</li>
+							<li class="list-group-item">
+								<img src="http://www.rap-up.com/app/uploads/2015/03/kendrick-cover.jpg" class="img-circle img-fluid" width="64" height="64">
+								<div class="snippet-details">
+									<span class="lead">Namir Fawaz</span><br>
+									<span class="text-muted">1hr ago</span>
+								</div>
+							</li>
+							<li class="list-group-item">
+								<img src="https://upload.wikimedia.org/wikipedia/en/9/93/Pharmacy_by_Galantis.jpg" class="img-circle img-fluid" width="64" height="64">
+								<div class="snippet-details">
+									<span class="lead">Ben Chen</span><br>
+									<span class="text-muted">2hr ago</span>
+								</div>
+							</li>
+							<li class="list-group-item">
+								<img src="https://upload.wikimedia.org/wikipedia/en/6/67/Roses_%28featuring_ROZES%29_%28Official_Single_Cover%29_by_The_Chainsmokers.png" class="img-circle img-fluid" width="64" height="64">
+								<div class="snippet-details">
+									<span class="lead">Adrian Law</span><br>
+									<span class="text-muted">3hr ago</span>
+								</div>
+							</li>
+						  </ul>
+						</div>
+					</div>
+			</div>
+			</div>
+		</div>
+		<div class="horizontal-scrolling snippet">
+
+		</div>
+		<div class="horizontal-scrolling snippet">
+
+		</div>
+	</section>
+</div>
     <div class="container">
         <div class="row">
 			<div style="margin-top: 1em;" class="col-sm-4">
@@ -96,14 +138,24 @@
         </div>
     </div>
     <style class="ng-scope">
+	
+	.snippet{
+		background: #c0392b;  /* fallback for old browsers */
+		background: -webkit-linear-gradient(to top, #8e44ad, #c0392b);  /* Chrome 10-25, Safari 5.1-6 */
+		background: linear-gradient(to top, #8e44ad, #c0392b); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+	}
+	
+	.img-circle {
+    border-radius: 50%;
+}
+
+.snippet-details{
+	padding-left: 1em;
+}
+	
         .navbar {
             margin-bottom: 0;
         }
-		
-		.col-sm-4{
-			margin-bottom: -9999px;
-			padding-bottom: -9999px;
-		}
 
         .open-stack-login {
             margin-top: 1em;

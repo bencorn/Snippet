@@ -17,6 +17,17 @@ angular.module('SnippetMain', []).controller('SnippetMain', function($scope, $ht
 	}
 
 	$(function () {
+		
+		$('#fullpage').fullpage({
+			sectionSelector: '.vertical-scrolling',
+			slideSelector: '.horizontal-scrolling',
+			controlArrows: false,
+			slidesNavigation: true,
+			scrollHorizontally: true,
+			dragAndMove: true,
+			verticalCentered: false
+		});
+		
 	    document.addEventListener('play', function (e) {
 	        var audios = document.getElementsByTagName('audio');
 	        for (var i = 0, len = audios.length; i < len; i++) {
