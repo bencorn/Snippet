@@ -59,33 +59,14 @@
 			</div>
 			</div>
 		</div>
-		<div class="horizontal-scrolling snippet">
-
-		</div>
-		<div class="horizontal-scrolling snippet">
-
-		</div>
-	</section>
-</div>
-    <div class="container">
-        <div class="row">
-			<div style="margin-top: 1em;" class="col-sm-4">
-				<h5>Snippets</h5>
-				<div class="card">
-				  <ul class="list-group list-group-flush">
-					<li class="list-group-item">Cras justo odio</li>
-					<li class="list-group-item">Dapibus ac facilisis in</li>
-					<li class="list-group-item">Vestibulum at eros</li>
-				  </ul>
-				</div>
-			</div>
-            <div style="margin-top: 1em;" class="col-sm-4">
-			<h5>Snip</h5>
+		<div class="horizontal-scrolling snip">
+			<div class="container">
                 <div class="row">
-                    <div class="col-sm-12">
+					<div style="margin-top: 4em;" class="col-sm-12">
+						<h4 style="font-weight: 100; color: white;">Snip</h4>
+
                         <form>
                             <div class="form-group spotify-search">
-                                <label>Search Song</label>
                                 <input type="text" class="form-control" ng-model="vm.SearchQuery" />
                                 <button style="float:right; margin-top: 1em; margin-bottom: 1em;" type="button" ng-click="vm.Search()" class="btn btn-primary">Search</button>
                             </div>
@@ -94,19 +75,20 @@
                 </div>
                 <div class="row" ng-if="vm.SongResults">
                     <div style="margin-top:1em;" class="results-table col-sm-12">
-                        <table class="table">
+                        <table class="table table-borderless">
                             <thead>
-                                <tr>
+                                <tr style="color: white;">
                                     <th></th>
-                                    <th style="width: 25%;">SONG</th>
+                                    <th style="width: 25%;">TITLE</th>
                                     <th style="width: 25%;">ARTIST</th>
                                     <th>PREVIEW</th>
+									<th></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr ng-repeat="song in vm.SongResults.tracks.items">
+                                <tr ng-repeat="song in vm.SongResults.tracks.items | limitTo: 5">
                                     <th scope="row">
-                                        <img style="max-width: 20%" class="img-responsive" ng-src="{{song.album.images[0].url | trustAudioSrc}}" alt="Album Title">
+                                        <img style="max-width: 20%" class="img-circle" ng-src="{{song.album.images[0].url | trustAudioSrc}}" alt="Album Title">
                                     </th>
                                     <td>{{song.name}}</td>
                                     <td>{{song.artists[0].name}}</td>
@@ -116,33 +98,77 @@
                                             Your browser does not support the audio element.
                                         </audio>
                                     </td>
+									<td>
+										<i class="fa fa-plus" aria-hidden="true"></i>
+									</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
-            </div>
-			<div style="margin-top: 1em;" class="col-sm-4">
-				<div class"card">
-					<h5>Explore</h5>
-					<div class="card card-inverse">
-					  <img class="card-img img-fluid" src="https://ultramusicfestival.com/wp-content/uploads/2015/11/miami-og-3.jpg" alt="Card image">
-					  <div class="card-img-overlay">
-						<h4 class="card-title">Electronic/Dance</h4>
-						<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-						<p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-					  </div>
+			</div>
+		</div>
+		<div class="horizontal-scrolling explore">
+			<div class="container">
+				<div class="row">         
+					<div style="margin-top: 4em;" class="col-sm-12">
+						<h4 style="font-weight: 100; color: white;">Explore</h4>
+						<div class"card">
+							<div class="card card-inverse">
+							  <img class="card-img img-fluid" src="https://ultramusicfestival.com/wp-content/uploads/2015/11/miami-og-3.jpg" alt="Card image">
+							  <div class="card-img-overlay">
+								<h4 class="card-title">Electronic/Dance</h4>
+								<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+								<p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+							  </div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
-        </div>
-    </div>
+		</div>
+	</section>
+</div>
+
     <style class="ng-scope">
+	
+	.table-borderless > tfoot > tr > td,
+	.table-borderless > tfoot > tr > th {
+		border: none !important;
+	}
+	
+	.table-borderless > tbody > tr > td,
+	.table-borderless > tbody > tr > th,
+	.table-borderless > thead > tr > td,
+	.table-borderless > thead > tr > th {
+		border-color: rgba(255,255,255,.6);
+	}
 	
 	.snippet{
 		background: #c0392b;  /* fallback for old browsers */
 		background: -webkit-linear-gradient(to top, #8e44ad, #c0392b);  /* Chrome 10-25, Safari 5.1-6 */
 		background: linear-gradient(to top, #8e44ad, #c0392b); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+	}
+	
+	.snip{
+		background: #C33764;  /* fallback for old browsers */
+		background: -webkit-linear-gradient(to top, #1D2671, #C33764);  /* Chrome 10-25, Safari 5.1-6 */
+		background: linear-gradient(to top, #1D2671, #C33764); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+	}
+	
+	.explore{
+		background: #F3904F;  /* fallback for old browsers */
+		background: -webkit-linear-gradient(to top, #3B4371, #F3904F);  /* Chrome 10-25, Safari 5.1-6 */
+		background: linear-gradient(to top, #3B4371, #F3904F); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+	}
+	
+	th{
+	    letter-spacing: .1em;
+		font-weight: 100;
+	}
+	
+	tr{
+		color: white;
 	}
 	
 	.img-circle {
