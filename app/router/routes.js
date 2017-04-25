@@ -23,6 +23,8 @@ function initapp (app) {
 	app.post('/api/spotify/search', spotifySearch);
 	app.post('/api/user/register', registerUser);
 	app.post('/api/user/login', loginUser);
+	// app.post('/api/user/getFriends', getFriends);
+	// app.post('/api/user/getStream', getStream);
 }
 
 function spotifySearch(req, res){
@@ -43,12 +45,12 @@ spotifyApi.searchTracks(req_obj.searchQuery)
 }
 
 function loginUser(req, res){
-	var email = req.body.username;
+	var username = req.body.username.split("@")[0];
 	var password = req.body.password;
 	
 	// Implement Login with Passport (Normal, Not Facebook)
 		
-	Auth.findOne({email:email}, function (err, authdata) {
+	Auth.findOne({username:username}, function (err, authdata) {
 		if (!err){
 			if (authdata.validPassword(password)){
 				newJWT = authdata.generateJwt()
@@ -66,7 +68,7 @@ function registerUser(req, res){
 	var password = req.body.password;
 	
 	var newAuth = new Auth({
-		email: email,
+		username: username,
 		name: name
 	})
 
@@ -77,8 +79,7 @@ function registerUser(req, res){
 	var newUser = new User({
 		name: name,
 		email: email,
-		username: username,
-		password: password
+		username: username
 	});
 	
 	User.createUser(newUser, function(err, user){
@@ -101,15 +102,26 @@ function getHome(req, res) {
 	var token = req.cookies.Snippet
 	Auth.decodeToken(token, function(err, decoded) {
 		if(err || decoded.exp <= (Date.now())/ 1000){
-			// token is not stale or invalid, redirect to login
+			// token is not stale or valid, redirect to login
 			res.redirect("/login");
 		}
 		else{
-			// token is up to date and valid
-			res.render("index.ejs")
+			// token is up to date, check if data valid
+			User.findOne({username: decoded.username}, function (err, authdata) {
+				if(authdata && !err){
+					// data valid, send to index
+					res.render("index.ejs")
+				}
+				else{
+					// data invalid, redirect to login
+					res.redirect("/login");
+				}
+			})
 		}
 	})
 }
+
+
 
 // function getTest(req, res) {
 // 	db.read('test', function(err,results){

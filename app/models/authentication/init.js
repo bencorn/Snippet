@@ -7,7 +7,7 @@ var jwt = require('jsonwebtoken');
 var config = {'jwtsecret': "MY_SECRET"}
 
 var authSchema = new mongoose.Schema({
-	email: {
+	username: {
 		type: String,
 		unique: true,
 		required: true
