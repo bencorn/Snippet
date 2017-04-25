@@ -100,25 +100,31 @@ function getRegister(req, res){
 
 function getHome(req, res) {
 	var token = req.cookies.Snippet
-	Auth.decodeToken(token, function(err, decoded) {
-		if(err || decoded.exp <= (Date.now())/ 1000){
-			// token is not stale or valid, redirect to login
-			res.redirect("/login");
-		}
-		else{
-			// token is up to date, check if data valid
-			User.findOne({username: decoded.username}, function (err, authdata) {
-				if(authdata && !err){
-					// data valid, send to index
-					res.render("index.ejs")
-				}
-				else{
-					// data invalid, redirect to login
-					res.redirect("/login");
-				}
-			})
-		}
-	})
+	if(token === undefined) {
+		res.redirect("/login")
+	}
+	else {
+		Auth.decodeToken(token, function(err, decoded) {
+			if(err || decoded.exp <= (Date.now())/ 1000){
+				// token is not stale or valid, redirect to login
+				res.redirect("/login")
+			}
+			else{
+				// token is up to date, check if data valid
+				User.findOne({username: decoded.username}, function (err, authdata) {
+					if(authdata && !err){
+						// data valid, send to index
+						res.render("index.ejs")
+					}
+					else{
+						// data invalid, redirect to login
+						res.redirect("/login");
+					}
+				})
+			}
+		})
+
+	}
 }
 
 
