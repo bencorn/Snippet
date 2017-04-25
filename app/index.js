@@ -1,6 +1,6 @@
 
 // Requires
-
+var config = require('../config/config.json')
 var path = require('path')
 var bodyParser = require('body-parser');
 var express = require('express');
@@ -9,7 +9,7 @@ var passport = require('passport');
 var LocalStrategy = require('passport-local');
 var FacebookStrategy = require('passport-facebook');
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://127.0.0.1:27017');
+mongoose.connect(config.mongo_url + '/admin');
 var cookieParser = require('cookie-parser');
 
 var db = mongoose.connection;

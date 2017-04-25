@@ -4,7 +4,7 @@
 
 //initialize mongoDB read & push
 var db = require('../models/mongodb');
-var auth = require('../models/authentication');
+var Auth = require('../models/authentication');
 var randomstring = require('randomstring');
 var User = require('../models/user');
 var passport = require('passport');
@@ -43,21 +43,18 @@ spotifyApi.searchTracks(req_obj.searchQuery)
 }
 
 function loginUser(req, res){
-	var username = req.body.username;
+	var email = req.body.username;
 	var password = req.body.password;
 	
 	// Implement Login with Passport (Normal, Not Facebook)
-	
-	console.log(username)
-	console.log(password)
-
-	var name = username.split("@")[0]
-	var str = randomstring.generate(32)
-	auth.setCookie(name, str, function(err) {
-		if(!err) {
-			res.cookie('Snippet', str)
-			console.log(str)
-			res.send('/')
+		
+	Auth.findOne({email:email}, function (err, authdata) {
+		if (!err){
+			if (authdata.validPassword(password)){
+				newJWT = authdata.generateJwt()
+				res.cookie('Snippet', newJWT)
+				res.send('/')
+			}
 		}
 	})
 }
@@ -65,9 +62,19 @@ function loginUser(req, res){
 function registerUser(req, res){
 	var name = req.body.name;
 	var email = req.body.email;
-	var username = req.body.username;
+	var username = req.body.username.split("@")[0];
 	var password = req.body.password;
 	
+	var newAuth = new Auth({
+		email: email,
+		name: name
+	})
+
+	Auth.createToken(newAuth, password, function(err, token){
+		token.setPassword(password)
+		newJWT = token.generateJwt()
+	})
+
 	var newUser = new User({
 		name: name,
 		email: email,
@@ -76,15 +83,10 @@ function registerUser(req, res){
 	});
 	
 	User.createUser(newUser, function(err, user){
-		if(err) throw err;
-		var str = randomstring.generate(32)
-		auth.setCookie(username, str, function (err) {
-		    if (!err) {
-		        res.cookie('Snippet', str)
-		        console.log(str)
-		        res.send('/')
-		    }
-		})
+		if (!err) {
+			res.cookie('Snippet', newJWT)
+			res.send('/')
+		}
 	});
 };
 
@@ -97,15 +99,15 @@ function getRegister(req, res){
 }
 
 function getHome(req, res) {
-	console.log(req.cookies.Snippet)
-	auth.checkCookies(req.cookies.Snippet, function(err, valid, results) {
-		if(valid){
-			// cookie is up to date
-			res.render("index.ejs")
+	var token = req.cookies.Snippet
+	Auth.decodeToken(token, function(err, decoded) {
+		if(err || decoded.exp <= (Date.now())/ 1000){
+			// token is not stale or invalid, redirect to login
+			res.redirect("/login");
 		}
 		else{
-			// cookie is stale, redirect to login
-			res.redirect("/login");
+			// token is up to date and valid
+			res.render("index.ejs")
 		}
 	})
 }
