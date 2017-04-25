@@ -77,20 +77,20 @@ function registerUser(req, res){
 
 	Auth.createToken(newAuth, password, function(err, token){
 		newJWT = token.generateJwt()
-	})
 
-	var newUser = new User({
-		name: name,
-		email: email,
-		username: username
-	});
-	
-	User.createUser(newUser, function(err, user){
-		if (!err) {
-			res.cookie('Snippet', newJWT)
-			res.send('/')
-		}
-	});
+		var newUser = new User({
+			name: name,
+			email: email,
+			username: username
+		});
+
+		User.createUser(newUser, function(err, user){
+			if (!err) {
+				res.cookie('Snippet', newJWT)
+				res.send('/')
+			}
+		});
+	})
 };
 
 function getLogin(req, res){
