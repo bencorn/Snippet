@@ -71,7 +71,6 @@ function registerUser(req, res){
 	})
 
 	Auth.createToken(newAuth, password, function(err, token){
-		token.setPassword(password)
 		newJWT = token.generateJwt()
 	})
 

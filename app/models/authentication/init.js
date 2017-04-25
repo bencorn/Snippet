@@ -20,10 +20,10 @@ var authSchema = new mongoose.Schema({
 	salt: String
 });
 
-authSchema.methods.setPassword = function(password){
-	this.salt = crypto.randomBytes(16).toString('hex');
-	this.hash = crypto.pbkdf2Sync(password, this.salt, 1000, 64).toString('hex');
-};
+// authSchema.methods.setPassword = function(password){
+// 	this.salt = crypto.randomBytes(16).toString('hex');
+// 	this.hash = crypto.pbkdf2Sync(password, this.salt, 1000, 64).toString('hex');
+// };
 
 authSchema.methods.validPassword = function(password) {
   var hash = crypto.pbkdf2Sync(password, this.salt, 1000, 64).toString('hex');
