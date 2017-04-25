@@ -19,12 +19,15 @@ function initapp (app) {
 	app.get('/auth/facebook',passport.authenticate('facebook'));
 	app.get('/auth/facebook/callback',
 		passport.authenticate('facebook', {successRedirect: '/', failureRedirect:'/login'}));
+
+	app.get('/api/user/getFriends', getFriends);
+	app.get('/api/user/getStream', getStream);
 	// app.post('/test', postTest);
 	app.post('/api/spotify/search', spotifySearch);
 	app.post('/api/user/register', registerUser);
 	app.post('/api/user/login', loginUser);
-	// app.post('/api/user/getFriends', getFriends);
-	// app.post('/api/user/getStream', getStream);
+	app.post('/api/user/addFriend', addFriend);
+	app.post('/api/user/addSongtoStream', addSongtoStream);
 }
 
 function spotifySearch(req, res){
@@ -127,7 +130,21 @@ function getHome(req, res) {
 	}
 }
 
+function getFriends(req, res) {
+	// body...
+}
 
+function getStream(req, res) {
+	// body...
+}
+
+function addFriend(req, res) {
+	// body...
+}
+
+function addSongtoStream(req, res) {
+	// body...
+}
 
 // function getTest(req, res) {
 // 	db.read('test', function(err,results){
