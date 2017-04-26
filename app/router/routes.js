@@ -30,6 +30,35 @@ function initapp (app) {
 	app.post('/api/user/addSongtoStream', addSongtoStream);
 }
 
+function verifyToken(token_string, callback) {
+	// takes in the token string (stored in req.cookies.snippet) and returns boolean,data
+	if(token_string === undefined || token_string.length == 0) {
+		callback(true,{message:"Please sign in", error: 'token_string is undefined'})
+	}
+	else {
+		Auth.decodeToken(token_string, function(err, decoded) {
+			if(err || decoded === null || decoded.exp <= (Date.now())/ 1000){
+				// token is not stale or valid, redirect to login
+				callback(true,{message:"Please log in again", error:err})
+			}
+			else{
+				// token is up to date, check if data valid
+				User.findOne({email: decoded.email}, function (err, userdata) {
+					if(err || userdata === null){
+						// data invalid, redirect to login
+						callback(true,{message:"User not found", error:err})
+					}
+					else{
+						// data valid, send to index
+						callback(false, userdata)
+					}
+				})
+			}
+		})
+
+	}
+}
+
 function spotifySearch(req, res){
 console.log(req.body);
      var req_obj = req.body;
@@ -48,14 +77,23 @@ spotifyApi.searchTracks(req_obj.searchQuery)
 }
 
 function loginUser(req, res){
-	var username = req.body.username.split("@")[0];
+	var email = req.body.username;
 	var password = req.body.password;
 	
 	// Implement Login with Passport (Normal, Not Facebook)
 		
-	Auth.findOne({username:username}, function (err, authdata) {
-		if (!err){
-			if (authdata.validPassword(password)){
+	Auth.findOne({email:email}, function (err, authdata) {
+		if (err || authdata === null){
+			//email not found
+			console.log("no email")
+		}
+		else{
+			if (!authdata.validPassword(password)){
+				//password invalid
+				console.log("bad password")
+			}
+			else{
+				//credentials OK, send jwt and log on
 				newJWT = authdata.generateJwt()
 				res.cookie('Snippet', newJWT)
 				res.send('/')
@@ -70,28 +108,34 @@ function registerUser(req, res){
 	var username = req.body.username.split("@")[0];
 	var password = req.body.password;
 	
-	var newAuth = new Auth({
+	var newUser = new User({
 		username: username,
+		email: email,
 		name: name
+		// friends: []
+		// stream: []
+	});
+
+	newUser.save(function(err) {
+		if(err) {
+			//user has registered before
+			console.log(err)
+		}
+		else {
+			var newAuth = new Auth({
+				email: email,
+				name: name
+			})
+			Auth.createToken(newAuth, password, function(err, token){
+				if (!err) {
+					newJWT = token.generateJwt()
+					res.cookie('Snippet', newJWT)
+					res.send('/')
+				}
+			})
+		}
 	})
-
-	Auth.createToken(newAuth, password, function(err, token){
-		newJWT = token.generateJwt()
-
-		var newUser = new User({
-			name: name,
-			email: email,
-			username: username
-		});
-
-		User.createUser(newUser, function(err, user){
-			if (!err) {
-				res.cookie('Snippet', newJWT)
-				res.send('/')
-			}
-		});
-	})
-};
+}
 
 function getLogin(req, res){
 	res.render("login.ejs");
@@ -103,31 +147,16 @@ function getRegister(req, res){
 
 function getHome(req, res) {
 	var token = req.cookies.Snippet
-	if(token === undefined) {
-		res.redirect("/login")
-	}
-	else {
-		Auth.decodeToken(token, function(err, decoded) {
-			if(err || decoded.exp <= (Date.now())/ 1000){
-				// token is not stale or valid, redirect to login
-				res.redirect("/login")
-			}
-			else{
-				// token is up to date, check if data valid
-				User.findOne({username: decoded.username}, function (err, authdata) {
-					if(authdata && !err){
-						// data valid, send to index
-						res.render("index.ejs")
-					}
-					else{
-						// data invalid, redirect to login
-						res.redirect("/login");
-					}
-				})
-			}
-		})
-
-	}
+	verifyToken(token, function(err, data) {
+		if(err) {
+			console.log(data)
+			res.redirect('/login')
+		}
+		else{
+			console.log(data)
+			res.render('index')
+		}
+	})
 }
 
 function getFriends(req, res) {

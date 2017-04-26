@@ -7,7 +7,7 @@ var jwt = require('jsonwebtoken');
 var config = {'jwtsecret': "MY_SECRET"}
 
 var authSchema = new mongoose.Schema({
-	username: {
+	email: {
 		type: String,
 		unique: true,
 		required: true
@@ -19,11 +19,6 @@ var authSchema = new mongoose.Schema({
 	hash: String,
 	salt: String
 });
-
-// authSchema.methods.setPassword = function(password){
-// 	this.salt = crypto.randomBytes(16).toString('hex');
-// 	this.hash = crypto.pbkdf2Sync(password, this.salt, 1000, 64).toString('hex');
-// };
 
 authSchema.methods.validPassword = function(password) {
   var hash = crypto.pbkdf2Sync(password, this.salt, 1000, 64).toString('hex');
@@ -38,7 +33,6 @@ authSchema.methods.generateJwt = function() {
     _id: this._id,
     email: this.email,
     name: this.name,
-    username: this.username,
     exp: parseInt(expiry.getTime() / 1000),
   }, config.jwtsecret); // Move to config?
 };
@@ -53,7 +47,7 @@ module.exports.createToken = function(token,password, callback){
 
 module.exports.decodeToken = function(token, callback){
   jwt.verify(token, config.jwtsecret, function(err, decoded) {
-    if(err){callback(err, 0)}
+    if(err){callback(true, err)}
     callback(false, decoded)
   })
 }
