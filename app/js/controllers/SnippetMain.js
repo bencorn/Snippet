@@ -22,6 +22,10 @@ angular.module('SnippetMain', []).controller('SnippetMain', function($scope, $ht
             $(this).children('.collapse').collapse('show');
         }) 
     }
+    
+    vm.SearchUsers = function(){
+        console.log(vm.FriendQuery);
+    }
 
 	$(function () {
         
@@ -36,6 +40,18 @@ angular.module('SnippetMain', []).controller('SnippetMain', function($scope, $ht
 			dragAndMove: true,
 			verticalCentered: false
 		});
+        
+        $(".friend-search").keyup(function(event){
+            if(event.keyCode == 13){
+                vm.SearchUsers();
+            }
+        });
+        
+        $(".song-search").keyup(function(event){
+            if(event.keyCode == 13){
+                vm.Search();
+            }
+        });
         
         // Loading Friend Streams on Initial Page Load
         $http.get('/api/user/getStreams')
