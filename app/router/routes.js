@@ -170,7 +170,7 @@ function getFriends(req, res) {
 		}
 		else{
 			// token valid, send friends
-			res.send(userdata.friends)
+			res.json(userdata.friends)
 		}
 	})
 }
@@ -184,7 +184,7 @@ function getStream(req, res) {
 		}
 		else{
 			// token valid, send stream
-			res.send(userdata.stream)
+			res.json(userdata.stream)
 		}
 	})
 }
