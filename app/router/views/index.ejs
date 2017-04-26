@@ -22,31 +22,52 @@
 			<div class="container">
 				<div class="row">
 					<div style="margin-top: 4em;" class="col-sm-12">
-						<h4 style="font-weight: 100; color: white;">Snippets</h4>
-						<div style="max-height: 100%; overflow: auto;" id="menu" class="card">
-						  <ul class="list-group">
-							<div id="menu" ng-repeat="stream in vm.Streams">
-                                <li data-toggle="collapse" data-target="{{'#' + stream.userId}}" data-parent="#menu" class="list-group-item">
+						<h4 style="font-weight: 100; color: white;">Friend Streams</h4>
+						<div style="max-height: 100%; overflow: auto;" class="card">
+						  <ul id="accordian" class="list-group">
+							<div ng-repeat="stream in vm.Streams" ng-init="$last && vm.CreateTriggerEvent()">
+                                <li data-toggle="collapse" data-target="{{'#' + stream.userId}}" class="list-group-item stream">
 								<img ng-src="{{stream.albumCover | trustAudioSrc}}" class="img-circle img-fluid" width="64" height="64">
 								<div class="snippet-details">
 									<span class="lead">{{stream.userName}}</span><br>
 									<span class="text-muted">{{stream.time}}</span>
 								</div>
                                 </li>
-                                <div id="{{stream.userId}}" class="collapse">
-                                  <a ng-repeat="s in stream.snippets" class="list-group-item small">
+                            <div id="{{stream.userId}}" class="collapse">
+                                  <a ng-repeat="s in stream.snippets" class="list-group-item stream-item small d-flex justify-content-start">
+                                    <div class="p-2">
                                         <img ng-src="{{s.albumCover | trustAudioSrc}}" class="img-circle img-fluid" width="32" height="32">
-                                    <div class="snippet-details">
+                                    </div>
+                                    <div class="snippet-details p-2">
                                         <span class="lead">{{s.songTitle}}</span><br>
                                         <span class="text-muted">{{s.artistName}}</span>
-                                    </div>                                                                            
+                                    </div>
+                                    <div class="ml-auto p-2">
+                                        <audio style="width: 210px;" controls>
+                                            <source ng-src="{{s.streamSrc | trustAudioSrc}}" type="audio/mpeg">
+                                            Your browser does not support the audio element.
+                                        </audio>
+                                    </div>
+                                    <div class="p-2">
+                                        <div class="dropdown">
+                                            <button ng-click="vm.AddStream(s.songId)" data-toggle="dropdown" class="btn btn-outline-primary btn-circle">
+                                            <i class="fa fa-plus" aria-hidden="true"></i>
+                                        </button>
+<!--
+                                        <div class="dropdown-menu stream-dropdown" aria-labelledby="dropdownMenu2">
+                                            <button class="dropdown-item" type="button">Add to Stream</button>
+                                            <button class="dropdown-item" type="button">Add to Playlist</button>
+                                        </div>
+-->
+                                        </div>
+                                    </div>
                                 </a>
-                                </div>
+                            </div>
                             </div>
 						  </ul>
 						</div>
 					</div>
-			</div>
+			     </div>
 			</div>
 		</div>
 		<div class="horizontal-scrolling snip">
@@ -121,6 +142,26 @@
 </div>
 
     <style class="ng-scope">
+        
+        .btn-circle{
+              width: 30px;
+              height: 30px;
+              text-align: center;
+              padding: 6px 0;
+              font-size: 12px;
+              line-height: 1.428571429;
+              border-radius: 15px;
+        }
+        
+        .stream-item{
+            background-color: #fafafa;
+        }
+        
+        .stream-dropdown{
+            top: -27px !important;
+            left: -143px !important;
+            border-radius: 0 !important;
+        }
 	
 	.table-borderless > tfoot > tr > td,
 	.table-borderless > tfoot > tr > th {
