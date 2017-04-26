@@ -19,7 +19,8 @@ function initapp (app) {
 	app.get('/auth/facebook',passport.authenticate('facebook'));
 	app.get('/auth/facebook/callback',
 		passport.authenticate('facebook', {successRedirect: '/', failureRedirect:'/login'}));
-
+    
+    app.get('/api/user/getStreams', getStreams);
 	app.get('/api/user/getFriends', getFriends);
 	app.get('/api/user/getStream', getStream);
 	// app.post('/test', postTest);
@@ -186,6 +187,82 @@ function getStream(req, res) {
 			res.send(userdata.stream)
 		}
 	})
+}
+
+function getStreams(req, res){
+    var streams = [
+      {
+          userId : 1,
+          albumCover : 'http://www.billboard.com/files/styles/900_wide/public/media/Beyonce-Beyonce-greatest-album-covers-billboard-1000x1000.jpg',
+          userName : 'Benjamin Corn',
+          time : '33m ago',
+          snippets : [
+            {
+                albumCover : 'https://static.gigwise.com/gallery/5209864_8262181_JasonDeruloTatGall.jpg',
+                songTitle : 'Tat Gall',
+                artistName : 'Jason Derulo'
+            },
+            {
+                albumCover : 'http://www.fuse.tv/image/56fe73a1e05e186b2000009b/768/512/the-boxer-rebellion-ocean-by-ocean-album-cover-full-size.jpg',
+                songTitle : 'Ocean',
+                artistName : 'The Boxer Rebellion'
+            },
+            {
+                albumCover : 'https://cdn.pastemagazine.com/www/system/images/photo_albums/album-covers/large/album4chanceacidrap.jpg?1384968217',
+                songTitle : 'Acid Rap',
+                artistName : 'Chance'
+            }
+          ]
+      },
+      {
+          userId : 2,
+          albumCover : 'http://illusion.scene360.com/wp-content/uploads/2014/10/computergraphics-album-covers-2014-15.jpg',
+          userName : 'Ben Chen',
+          time : '1hr ago',
+          snippets : [
+            {
+                albumCover : 'http://androidjones.com/wp-content/uploads/2012/05/HOPE-1024x1024.jpg',
+                songTitle : 'Hope',
+                artistName : 'The Losers'
+            },
+            {
+                albumCover : 'https://www.smashingmagazine.com/images/music-cd-covers/27.jpg',
+                songTitle : 'Shrooms',
+                artistName : 'The Growers'
+            },
+            {
+                albumCover : 'https://cdn.pastemagazine.com/www/system/images/photo_albums/bestalbumcovers/large/tv-on-the-radio-happy-idiot-00.jpg?1384968217',
+                songTitle : 'Mary Janes',
+                artistName : 'The Smokers'
+            }
+          ]
+      },
+      {
+          userId : 3,
+          albumCover : 'https://imgix.ranker.com/node_img/101/2009619/original/sgt-pepper-s-lonely-hearts-club-band-albums-photo-1?w=650&q=50&fm=jpg',
+          userName : 'Namir Fuzzy',
+          time : '2hr ago',
+          snippets : [
+            {
+                albumCover : 'https://s-media-cache-ak0.pinimg.com/736x/de/b5/8f/deb58ff0be3b4238ec3d1b4f96538627.jpg',
+                songTitle : 'Shrubs',
+                artistName : 'Bob Marley'
+            },
+            {
+                albumCover : 'http://exclaim.ca/images/14worst.jpg',
+                songTitle : 'Hope',
+                artistName : 'The Umbrellas'
+            },
+            {
+                albumCover : 'http://cdn2.pitchfork.com/news/50138/021544fb.jpg',
+                songTitle : 'Wolf',
+                artistName : 'Tyler the Creator'
+            }
+          ]
+      }
+    ];
+    
+    res.json(streams);
 }
 
 function addFriend(req, res) {

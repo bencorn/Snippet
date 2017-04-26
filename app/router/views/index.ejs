@@ -23,36 +23,26 @@
 				<div class="row">
 					<div style="margin-top: 4em;" class="col-sm-12">
 						<h4 style="font-weight: 100; color: white;">Snippets</h4>
-						<div class="card">
-						  <ul class="list-group list-group-flush">
-							<li class="list-group-item">
-								<img src="https://www.music-bazaar.com/album-images/vol30/1110/1110503/2977081-big/Lions-In-The-Wild-Single-cover.jpg" class="img-circle img-fluid" width="64" height="64">
+						<div style="max-height: 100%; overflow: auto;" id="menu" class="card">
+						  <ul class="list-group">
+							<div id="menu" ng-repeat="stream in vm.Streams">
+                                <li data-toggle="collapse" data-target="{{'#' + stream.userId}}" data-parent="#menu" class="list-group-item">
+								<img ng-src="{{stream.albumCover | trustAudioSrc}}" class="img-circle img-fluid" width="64" height="64">
 								<div class="snippet-details">
-									<span class="lead">Benjamin Corn</span><br>
-									<span class="text-muted">11m ago</span>
+									<span class="lead">{{stream.userName}}</span><br>
+									<span class="text-muted">{{stream.time}}</span>
 								</div>
-							</li>
-							<li class="list-group-item">
-								<img src="http://www.rap-up.com/app/uploads/2015/03/kendrick-cover.jpg" class="img-circle img-fluid" width="64" height="64">
-								<div class="snippet-details">
-									<span class="lead">Namir Fawaz</span><br>
-									<span class="text-muted">1hr ago</span>
-								</div>
-							</li>
-							<li class="list-group-item">
-								<img src="https://upload.wikimedia.org/wikipedia/en/9/93/Pharmacy_by_Galantis.jpg" class="img-circle img-fluid" width="64" height="64">
-								<div class="snippet-details">
-									<span class="lead">Ben Chen</span><br>
-									<span class="text-muted">2hr ago</span>
-								</div>
-							</li>
-							<li class="list-group-item">
-								<img src="https://upload.wikimedia.org/wikipedia/en/6/67/Roses_%28featuring_ROZES%29_%28Official_Single_Cover%29_by_The_Chainsmokers.png" class="img-circle img-fluid" width="64" height="64">
-								<div class="snippet-details">
-									<span class="lead">Adrian Law</span><br>
-									<span class="text-muted">3hr ago</span>
-								</div>
-							</li>
+                                </li>
+                                <div id="{{stream.userId}}" class="collapse">
+                                  <a ng-repeat="s in stream.snippets" class="list-group-item small">
+                                        <img ng-src="{{s.albumCover | trustAudioSrc}}" class="img-circle img-fluid" width="32" height="32">
+                                    <div class="snippet-details">
+                                        <span class="lead">{{s.songTitle}}</span><br>
+                                        <span class="text-muted">{{s.artistName}}</span>
+                                    </div>                                                                            
+                                </a>
+                                </div>
+                            </div>
 						  </ul>
 						</div>
 					</div>
