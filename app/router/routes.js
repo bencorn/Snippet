@@ -271,13 +271,17 @@ function addFriend(req, res) {
 	verifyToken(token, function(err, userdata) {
 		if(err) {
 			// invalid token, go to login
-			res.redirect('/login')
+			res.json({error:'invalid token'})
 		}
 		else{
 			// token valid, update friends
 			User.update(userdata,{friends: userdata.friends.push(friend_username)}, function(err, result){
-				if (err) return res.send(500, { error: err });
-				return res.send(200, result.friends);
+				if (err){
+					res.json({ error: err })
+				}
+				else{
+					res.json({friends: result.friends})
+				}
 			})
 		}
 	})
@@ -289,13 +293,17 @@ function addSongtoStream(req, res) {
 	verifyToken(token, function(err, userdata) {
 		if(err) {
 			// invalid token, go to login
-			res.redirect('/login')
+			res.json({error:'invalid token'})
 		}
 		else{
 			// token valid, update stream
 			User.update(userdata,{stream: userdata.stream.push(req_song)}, function(err, result){
-				if (err) return res.send(500, { error: err });
-				return res.send(200, result.stream);
+				if (err) {
+					res.json({ error: err }) 
+				}
+				else {
+					res.json({stream: result.stream})
+				}
 			})
 		}
 	})
