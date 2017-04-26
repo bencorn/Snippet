@@ -206,16 +206,22 @@ function getStreams(req, res){
           time : '33m ago',
           snippets : [
             {
+                songId : '345435',
+                streamSrc : 'https://p.scdn.co/mp3-preview/1cb344e49f240ec1ae951c074f50fc9cb8c46216?cid=null',
                 albumCover : 'https://static.gigwise.com/gallery/5209864_8262181_JasonDeruloTatGall.jpg',
                 songTitle : 'Tat Gall',
                 artistName : 'Jason Derulo'
             },
             {
+                songId : '5675',
+                streamSrc : 'https://p.scdn.co/mp3-preview/1cb344e49f240ec1ae951c074f50fc9cb8c46216?cid=null',
                 albumCover : 'http://www.fuse.tv/image/56fe73a1e05e186b2000009b/768/512/the-boxer-rebellion-ocean-by-ocean-album-cover-full-size.jpg',
                 songTitle : 'Ocean',
                 artistName : 'The Boxer Rebellion'
             },
             {
+                songId : '65756',
+                streamSrc : 'https://p.scdn.co/mp3-preview/1cb344e49f240ec1ae951c074f50fc9cb8c46216?cid=null',
                 albumCover : 'https://cdn.pastemagazine.com/www/system/images/photo_albums/album-covers/large/album4chanceacidrap.jpg?1384968217',
                 songTitle : 'Acid Rap',
                 artistName : 'Chance'
@@ -229,16 +235,22 @@ function getStreams(req, res){
           time : '1hr ago',
           snippets : [
             {
+                songId : '4565',
+                streamSrc : 'https://p.scdn.co/mp3-preview/1cb344e49f240ec1ae951c074f50fc9cb8c46216?cid=null',
                 albumCover : 'http://androidjones.com/wp-content/uploads/2012/05/HOPE-1024x1024.jpg',
                 songTitle : 'Hope',
                 artistName : 'The Losers'
             },
             {
+                songId : '223445',
+                streamSrc : 'https://p.scdn.co/mp3-preview/1cb344e49f240ec1ae951c074f50fc9cb8c46216?cid=null',
                 albumCover : 'https://www.smashingmagazine.com/images/music-cd-covers/27.jpg',
                 songTitle : 'Shrooms',
                 artistName : 'The Growers'
             },
             {
+                songId : '234234',
+                streamSrc : 'https://p.scdn.co/mp3-preview/1cb344e49f240ec1ae951c074f50fc9cb8c46216?cid=null',
                 albumCover : 'https://cdn.pastemagazine.com/www/system/images/photo_albums/bestalbumcovers/large/tv-on-the-radio-happy-idiot-00.jpg?1384968217',
                 songTitle : 'Mary Janes',
                 artistName : 'The Smokers'
@@ -252,16 +264,22 @@ function getStreams(req, res){
           time : '2hr ago',
           snippets : [
             {
+                songId : '234234',
+                streamSrc : 'https://p.scdn.co/mp3-preview/1cb344e49f240ec1ae951c074f50fc9cb8c46216?cid=null',
                 albumCover : 'https://s-media-cache-ak0.pinimg.com/736x/de/b5/8f/deb58ff0be3b4238ec3d1b4f96538627.jpg',
                 songTitle : 'Shrubs',
                 artistName : 'Bob Marley'
             },
             {
+                songId : '23423',
+                streamSrc : 'https://p.scdn.co/mp3-preview/1cb344e49f240ec1ae951c074f50fc9cb8c46216?cid=null',
                 albumCover : 'http://exclaim.ca/images/14worst.jpg',
                 songTitle : 'Hope',
                 artistName : 'The Umbrellas'
             },
             {
+                songId : '234234',
+                streamSrc : 'https://p.scdn.co/mp3-preview/1cb344e49f240ec1ae951c074f50fc9cb8c46216?cid=null',
                 albumCover : 'http://cdn2.pitchfork.com/news/50138/021544fb.jpg',
                 songTitle : 'Wolf',
                 artistName : 'Tyler the Creator'

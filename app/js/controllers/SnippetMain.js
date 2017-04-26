@@ -15,9 +15,17 @@ angular.module('SnippetMain', []).controller('SnippetMain', function($scope, $ht
 				vm.SongResults = resp.data;
 			});
 	};
+    
+    vm.CreateTriggerEvent = function(){
+        $('.list-group-item').click(function(){
+            $('.collapse').collapse('hide');
+            $(this).children('.collapse').collapse('show');
+        }) 
+    }
 
 	$(function () {
-		
+        
+        		
         // Initializing Full Page SPA (Single Page App Library)
 		$('#fullpage').fullpage({
 			sectionSelector: '.vertical-scrolling',
@@ -33,6 +41,10 @@ angular.module('SnippetMain', []).controller('SnippetMain', function($scope, $ht
         $http.get('/api/user/getStreams')
 			.then(function (resp) {
 				vm.Streams = resp.data;
+            
+                $('.list-group-item').on('click', function() {
+                    console.log('good')
+                })
 			});
 		
         // Stop Other Player When New Player Selected
