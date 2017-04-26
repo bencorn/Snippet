@@ -9,7 +9,7 @@ var config = {'jwtsecret': "MY_SECRET"}
 var authSchema = new mongoose.Schema({
 	email: {
 		type: String,
-		unique: true,
+    index: true,
 		required: true
 	},
   name: {

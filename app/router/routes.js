@@ -120,20 +120,27 @@ function registerUser(req, res){
 	newUser.save(function(err) {
 		if(err) {
 			// user has registered before
+			console.log('a')
 			console.log(err)
+			console.log('\n\n\n')
 		}
 		else {
 			// new user, add auth token and pass to index
+
+			console.log('b')
 			var newAuth = new Auth({
 				email: email,
 				name: name
 			})
 			Auth.createToken(newAuth, password, function(err, token){
+				console.log('c')
 				if (!err) {
+					console.log('d')
 					newJWT = token.generateJwt()
 					res.cookie('Snippet', newJWT)
 					res.send('/')
 				}
+				console.log(err)
 			})
 		}
 	})
@@ -156,6 +163,7 @@ function getHome(req, res) {
 		}
 		else{
 			// token valid, send to index
+			console.log(userdata)
 			res.render('index')
 		}
 	})

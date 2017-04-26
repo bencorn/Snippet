@@ -5,13 +5,13 @@ var bcrypt = require('bcryptjs');
 var UserSchema = new mongoose.Schema({
 	username: {
 		type: String,
-		required: true,
-		index: true
+		required: true
 	},
 	email: {
 		type: String,
 		unique: true,
-		required: true	
+		index: true,
+		required: true
 	},
 	name: {
 		type: String,
@@ -31,6 +31,7 @@ UserSchema.pre("save", true, function(next, done) {
 		if(err) {
 			done(err)
 		} else if(user) {
+			console.log(user)
 			self.invalidate("email", "email must be unique")
 			done(new Error("email must be unique"))
 		} else {
