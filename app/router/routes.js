@@ -118,10 +118,11 @@ function registerUser(req, res){
 
 	newUser.save(function(err) {
 		if(err) {
-			//user has registered before
+			// user has registered before
 			console.log(err)
 		}
 		else {
+			// new user, add auth token and pass to index
 			var newAuth = new Auth({
 				email: email,
 				name: name
@@ -147,32 +148,80 @@ function getRegister(req, res){
 
 function getHome(req, res) {
 	var token = req.cookies.Snippet
-	verifyToken(token, function(err, data) {
+	verifyToken(token, function(err, userdata) {
 		if(err) {
-			console.log(data)
+			// invalid token, go to login
 			res.redirect('/login')
 		}
 		else{
-			console.log(data)
+			// token valid, send to index
 			res.render('index')
 		}
 	})
 }
 
 function getFriends(req, res) {
-	// body...
+	var token = req.cookies.Snippet
+	verifyToken(token, function(err, userdata) {
+		if(err) {
+			// invalid token, go to login
+			res.redirect('/login')
+		}
+		else{
+			// token valid, send friends
+			res.send(userdata.friends)
+		}
+	})
 }
 
 function getStream(req, res) {
-	// body...
+	var token = req.cookies.Snippet
+	verifyToken(token, function(err, userdata) {
+		if(err) {
+			// invalid token, go to login
+			res.redirect('/login')
+		}
+		else{
+			// token valid, send stream
+			res.send(userdata.stream)
+		}
+	})
 }
 
 function addFriend(req, res) {
-	// body...
+	var token = req.cookies.Snippet
+	var req_friend = req.body.friend_username
+	verifyToken(token, function(err, userdata) {
+		if(err) {
+			// invalid token, go to login
+			res.redirect('/login')
+		}
+		else{
+			// token valid, update friends
+			User.update(userdata,{friends: userdata.friends.push(friend_username)}, function(err, result){
+				if (err) return res.send(500, { error: err });
+				return res.send(200, result.friends);
+			})
+		}
+	})
 }
 
 function addSongtoStream(req, res) {
-	// body...
+	var token = req.cookies.Snippet
+	var req_song = req.body.song_id
+	verifyToken(token, function(err, userdata) {
+		if(err) {
+			// invalid token, go to login
+			res.redirect('/login')
+		}
+		else{
+			// token valid, update stream
+			User.update(userdata,{stream: userdata.stream.push(req_song)}, function(err, result){
+				if (err) return res.send(500, { error: err });
+				return res.send(200, result.stream);
+			})
+		}
+	})
 }
 
 // function getTest(req, res) {
