@@ -24,7 +24,7 @@
 			<div class="container">
 				<div class="row">
 					<div style="margin-top: 4em;" class="col-sm-12">
-						<h4 style="font-weight: 100; color: white;">Friend Streams</h4>
+						<h4 style="font-weight: 100; color: white;">Followed Streams</h4>
 						<div style="max-height: 100%; overflow: auto;" class="card">
 						  <ul id="accordian" class="list-group">
 							<div ng-repeat="stream in vm.Streams" ng-init="$last && vm.CreateTriggerEvent()">
@@ -156,7 +156,7 @@
 			<div class="container">
 				<div class="row">         
 					<div style="margin-top: 4em;" class="col-sm-12">
-						<h4 style="font-weight: 100; color: white;">Find Friends</h4>
+						<h4 style="font-weight: 100; color: white;">Follow Snippers</h4>
                         <form>
                             <div class="form-group friend-search">
                                 <input placeholder="Enter a username or email" type="text" class="form-control friend-search" ng-model="vm.FriendQuery" />
