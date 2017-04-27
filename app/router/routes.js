@@ -212,7 +212,11 @@ function getStream(req, res) {
 		}
 		else{
 			// token valid, send stream
-			res.json(userdata.stream)
+			spotifyApi.getTracks(userdata.stream)
+                .then(function(data) {
+                	res.json(data.body);
+                }, function(err) {
+            }); 
 		}
 	})
 }
