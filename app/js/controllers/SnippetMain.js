@@ -54,6 +54,7 @@ angular.module('SnippetMain', []).controller('SnippetMain', function($scope, $ht
 				// Assign VM property Song results to resulting JSON
 				vm.Friends = result.data;
 			});
+        vm.getFriendsStreams()
     }
 
     vm.getUserStream = function(){
@@ -91,7 +92,7 @@ angular.module('SnippetMain', []).controller('SnippetMain', function($scope, $ht
 		});
         
         $(".song-search").keyup(function(event){
-            if(event.keyCode){
+            if(event.keyCode == 13){
                 vm.Search();
             }
         });
