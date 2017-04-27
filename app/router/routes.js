@@ -29,6 +29,7 @@ function initapp (app) {
 	app.post('/api/user/addFriend', addFriend);
     app.post('/api/users/search', searchUsers);
 	app.post('/api/user/addSongtoStream', addSongtoStream);
+	app.post('/api/user/removeSongfromStream', removeSongfromStream);
 }
 
 function verifyToken(token_string, callback) {
@@ -86,19 +87,19 @@ function getUserEmail(token_string) {
 }
 
 function spotifySearch(req, res){
-console.log(req.body);
-     var req_obj = req.body;
-     var SpotifyWebApi = require('spotify-web-api-node');
+	console.log(req.body);
+	var req_obj = req.body;
+	var SpotifyWebApi = require('spotify-web-api-node');
 
 	// credentials are optional
-     var spotifyApi = new SpotifyWebApi();
+	var spotifyApi = new SpotifyWebApi();
 
-spotifyApi.searchTracks(req_obj.searchQuery)
-  .then(function(data) {
-    res.json(data.body);
-  }, function(err) {
-	res.json('error');
-  });
+	spotifyApi.searchTracks(req_obj.searchQuery)
+		.then(function(data) {
+			res.json(data.body);
+		}, function(err) {
+			res.json('error');
+	});
 
 }
 
@@ -353,6 +354,34 @@ function addSongtoStream(req, res) {
 			var new_stream = userdata.stream
 			if (!new_stream.includes(req_song)) {
 				new_stream.push(req_song)
+			}
+			User.findOneAndUpdate({email:email}, {stream: new_stream}, {upsert:false}, function(err, result){
+				if (err) {
+					res.json({ error: err }) 
+				}
+				else {
+					res.json({stream: result.stream})
+				}
+			})
+		}
+	})
+}
+
+function removeSongfromStream(req, res) {
+	var token = req.cookies.Snippet
+	var req_song = req.body.song_id
+	verifyToken(token, function(err, userdata) {
+		if(err) {
+			// invalid token, go to login
+			res.json({error:'invalid token'})
+		}
+		else{
+			// token valid, update user's stream
+			var email = userdata.email
+			var new_stream = userdata.stream
+			if (new_stream.includes(req_song)) {
+				var i = new_stream.indexOf(req_song)
+				new_stream.splice(i,1)
 			}
 			User.findOneAndUpdate({email:email}, {stream: new_stream}, {upsert:false}, function(err, result){
 				if (err) {

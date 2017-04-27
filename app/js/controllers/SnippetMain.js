@@ -25,11 +25,25 @@ angular.module('SnippetMain', []).controller('SnippetMain', function($scope, $ht
 		$http.post('/api/user/addSongtoStream', req)
 			.then(function (result) {
 				// Assign VM property Song results to resulting JSON
-				vm.Streams = result.data;
+				vm.Streams = result.data;		
+				vm.getUserStream()
+				vm.getFriendsStreams()
 			});
-		vm.getUserStream()
-		vm.getFriendsStreams()
 	};
+
+	// remove song from the user's stream
+	vm.removeSong = function(song_id) {
+		console.log(song_id);
+		var req = {song_id: song_id};
+		// POST Query to Snippet API
+		$http.post('/api/user/removeSongfromStream', req)
+			.then(function (result) {
+				// Assign VM property Song results to resulting JSON
+				vm.Streams = result.data;
+				vm.getUserStream()
+				vm.getFriendsStreams()
+			});
+	}
 	
     vm.CreateTriggerEvent = function(){
         $('.list-group-item').click(function(){
@@ -45,6 +59,7 @@ angular.module('SnippetMain', []).controller('SnippetMain', function($scope, $ht
 			.then(function (result) {
 				// Assign VM property Song results to resulting JSON
 				vm.Users = result.data;
+				vm.getFriendsStreams()
 			});
     }
     
@@ -55,8 +70,8 @@ angular.module('SnippetMain', []).controller('SnippetMain', function($scope, $ht
 			.then(function (result) {
 				// Assign VM property Song results to resulting JSON
 				vm.Friends = result.data;
+       	 		vm.getFriendsStreams()
 			});
-        vm.getFriendsStreams()
     }
 
     vm.getUserStream = function(){

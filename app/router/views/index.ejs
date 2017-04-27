@@ -94,6 +94,10 @@
                                                     Your browser does not support the audio element.
                                                 </audio>
                                             </td>
+                                            <td>
+                                                <button style="color: #ffffff; border-color: #ffffff;" ng-click="vm.removeSong(song.id)" data-toggle="dropdown" class="btn btn-outline-primary btn-circle">
+                                                <i class="fa fa-minus" aria-hidden="true"></i>
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -170,7 +174,7 @@
                                     <div class="ml-auto p-2">
                                         <div class="dropdown">
                                             <button ng-click="vm.AddFriend(User.email)" data-toggle="dropdown" class="btn btn-outline-primary btn-circle">
-                                            <i class="fa fa-plus" aria-hidden="true"></i>
+                                            <i class="fa fa-user-plus" aria-hidden="true"></i>
                                         </button>
                                         </div>
                                     </div>
