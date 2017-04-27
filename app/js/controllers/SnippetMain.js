@@ -26,6 +26,7 @@ angular.module('SnippetMain', []).controller('SnippetMain', function($scope, $ht
 				// Assign VM property Song results to resulting JSON
 				vm.Streams = result.data;
 			});
+		vm.getUserStream()
 	};
 	
     vm.CreateTriggerEvent = function(){
@@ -55,8 +56,16 @@ angular.module('SnippetMain', []).controller('SnippetMain', function($scope, $ht
 			});
     }
 
+    vm.getUserStream = function(){
+        // Loading User Streams
+	    $http.get('/api/user/getStream')
+			.then(function (resp) {
+				console.log(resp.data)
+				vm.userStream = resp.data;
+			})
+    }
+
 	$(function () {
-        
         		
         // Initializing Full Page SPA (Single Page App Library)
 		$('#fullpage').fullpage({
@@ -80,7 +89,17 @@ angular.module('SnippetMain', []).controller('SnippetMain', function($scope, $ht
                 vm.Search();
             }
         });
-        
+
+        // Loading User Streams on Initial Page Load
+        vm.getUserStream();
+        //map search button to getStream
+        $(".song-search").keyup(function(event){
+            if(event.keyCode == 13){
+                vm.getUserStream();
+            }
+        });
+
+
         // Loading Friend Streams on Initial Page Load
         $http.get('/api/user/getStreams')
 			.then(function (resp) {
@@ -90,7 +109,8 @@ angular.module('SnippetMain', []).controller('SnippetMain', function($scope, $ht
                     console.log('good')
                 })
 			});
-		
+
+
         // Stop Other Player When New Player Selected
 	    document.addEventListener('play', function (e) {
 	        var audios = document.getElementsByTagName('audio');

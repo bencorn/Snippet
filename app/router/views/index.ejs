@@ -72,10 +72,37 @@
 		</div>
 		<div class="horizontal-scrolling snip">
 			<div class="container">
+
+                <div class="row">
+                    <div style="margin-top: 4em;" class="col-sm-12">
+                        <h4 style="font-weight: 100; color: white;">Your Snippets</h4>
+                        <div class="row" ng-if="vm.userStream.tracks">
+                            <div style="margin-top:1em; max-height: 12em; overflow-y: scroll" class="results-table col-sm-12">
+                                <table class="table table-borderless">
+                                    <tbody>
+                                        <tr ng-repeat="song in vm.userStream.tracks">
+                                            <th scope="row">
+                                                <img style="max-width: 20%" class="img-circle" ng-src="{{song.album.images[0].url | trustAudioSrc}}" alt="Album Title">
+                                            </th>
+                                            <td>{{song.name}}</td>
+                                            <td>{{song.artists[0].name}}</td>
+                                            <td>
+                                                <audio style="width: 210px;" controls>
+                                                    <source ng-src="{{song.preview_url | trustAudioSrc}}" type="audio/mpeg">
+                                                    Your browser does not support the audio element.
+                                                </audio>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="row">
 					<div style="margin-top: 4em;" class="col-sm-12">
 						<h4 style="font-weight: 100; color: white;">Snip</h4>
-
                         <form>
                             <div class="form-group spotify-search">
                                 <input type="text" class="form-control song-search" ng-model="vm.SearchQuery" />
@@ -85,7 +112,7 @@
                     </div>
                 </div>
                 <div class="row" ng-if="vm.SongResults">
-                    <div style="margin-top:1em;" class="results-table col-sm-12">
+                    <div style="margin-top:1em; min-height: 10em; max-height: 25em; overflow-y: scroll" class="results-table col-sm-12">
                         <table class="table table-borderless">
                             <thead>
                                 <tr style="color: white;">
@@ -97,7 +124,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr ng-repeat="song in vm.SongResults.tracks.items | limitTo: 5">
+                                <tr ng-repeat="song in vm.SongResults.tracks.items | limitTo: 20">
                                     <th scope="row">
                                         <img style="max-width: 20%" class="img-circle" ng-src="{{song.album.images[0].url | trustAudioSrc}}" alt="Album Title">
                                     </th>

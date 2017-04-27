@@ -231,6 +231,9 @@ function getStream(req, res) {
 		}
 		else{
 			// token valid, send stream
+			var SpotifyWebApi = require('spotify-web-api-node')
+			// credentials are optional
+			var spotifyApi = new SpotifyWebApi();
 			spotifyApi.getTracks(userdata.stream)
                 .then(function(data) {
                 	res.json(data.body);
