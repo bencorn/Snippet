@@ -9,7 +9,10 @@ var passport = require('passport');
 var LocalStrategy = require('passport-local');
 var FacebookStrategy = require('passport-facebook');
 var mongoose = require('mongoose');
-mongoose.connect(config.mongo_url + '/admin');
+
+var mongo_url = process.env.MONGODB_URI || config.mongo_url
+
+mongoose.connect(mongo_url + '/admin');
 var cookieParser = require('cookie-parser');
 
 var db = mongoose.connection;
