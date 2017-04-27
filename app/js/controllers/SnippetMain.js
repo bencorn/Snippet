@@ -65,6 +65,18 @@ angular.module('SnippetMain', []).controller('SnippetMain', function($scope, $ht
 			})
     }
 
+    vm.getFriendsStreams = function() {
+    	// Loading Friend Streams
+    	$http.get('/api/user/getStreams')
+			.then(function (resp) {
+				vm.Streams = resp.data;
+            
+                $('.list-group-item').on('click', function() {
+                    console.log('good')
+                })
+			});
+    }
+
 	$(function () {
         		
         // Initializing Full Page SPA (Single Page App Library)
@@ -78,38 +90,34 @@ angular.module('SnippetMain', []).controller('SnippetMain', function($scope, $ht
 			verticalCentered: false
 		});
         
-        $(".friend-search").keyup(function(event){
-            if(event.keyCode == 13){
-                vm.SearchUsers();
-            }
-        });
-        
         $(".song-search").keyup(function(event){
-            if(event.keyCode == 13){
+            if(event.keyCode){
                 vm.Search();
             }
         });
-
         // Loading User Streams on Initial Page Load
         vm.getUserStream();
-        //map search button to getStream
+        // map search button to getStream
         $(".song-search").keyup(function(event){
             if(event.keyCode == 13){
-                vm.getUserStream();
+                vm.getUserStream()
             }
         });
 
 
+        $(".friend-search").keyup(function(event){
+            if(event.keyCode == 13){
+                vm.SearchUsers()
+            }
+        });
         // Loading Friend Streams on Initial Page Load
-        $http.get('/api/user/getStreams')
-			.then(function (resp) {
-				vm.Streams = resp.data;
-            
-                $('.list-group-item').on('click', function() {
-                    console.log('good')
-                })
-			});
-
+        vm.getFriendsStreams()
+        // map search button to getFriendsStream
+        $(".friend-search").keyup(function(event){
+            if(event.keyCode == 13){
+                vm.getFriendsStreams()
+            }
+        });
 
         // Stop Other Player When New Player Selected
 	    document.addEventListener('play', function (e) {

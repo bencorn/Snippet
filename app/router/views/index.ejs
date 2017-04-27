@@ -160,15 +160,15 @@
                         <br>
                         <div ng-show="vm.Users" style="max-height: 100%; overflow: auto;" class="card">
 						  <ul id="accordian" class="list-group">
-							<div>
+							<div ng-repeat="User in vm.Users">
                                 <li class="list-group-item">
                                     <div class="snippet-details p-2">
-                                        <span class="lead">{{vm.Users.name}}</span><br>
-                                        <span class="text-muted">{{vm.Users.email}}</span>
+                                        <span class="lead">{{User.name}}</span><br>
+                                        <span class="text-muted">{{User.email}}</span>
                                     </div>                                   
                                     <div class="ml-auto p-2">
                                         <div class="dropdown">
-                                            <button ng-click="vm.AddFriend(vm.Users.email)" data-toggle="dropdown" class="btn btn-outline-primary btn-circle">
+                                            <button ng-click="vm.AddFriend(User.email)" data-toggle="dropdown" class="btn btn-outline-primary btn-circle">
                                             <i class="fa fa-plus" aria-hidden="true"></i>
                                         </button>
                                         </div>

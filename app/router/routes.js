@@ -21,7 +21,6 @@ function initapp (app) {
 		passport.authenticate('facebook', {successRedirect: '/', failureRedirect:'/login'}));
     
     app.get('/api/user/getStreams', getStreams);
-	app.get('/api/user/getFriends', getFriends);
 	app.get('/api/user/getStream', getStream);
 	// app.post('/test', postTest);
 	app.post('/api/spotify/search', spotifySearch);
@@ -190,36 +189,54 @@ function getHome(req, res) {
 	})
 }
 
-function getFriends(req, res) {
-	var token = req.cookies.Snippet
-	verifyToken(token, function(err, userdata) {
-		if(err) {
-			// invalid token, go to login
-			res.redirect('/login')
-		}
-		else{
-			// token valid, send friends
-			res.json(userdata.friends)
-		}
-	})
-}
-
 function searchUsers(req, res){
-    var username = req.body.username;
-    
-    User.findOne({email: username}, function(err, user){
-            if (err){
-                // to do later
-            }
-            else{
-                if (user){
-                    res.json(user.toObject());
-                }
-                else{
-                    res.json('');
-                }
-            }
-    }); 
+	var token = req.cookies.Snippet
+    var usernameQuery = req.body.username;
+    // console.log(usernameQuery)
+    if(usernameQuery.length < 3) {
+    	res.json([])
+    }
+    else {
+    	verifyToken(token, function(err, userdata) {
+			if(err) {
+				// invalid token, go to login
+				res.json({error:'invalid token'})
+			}
+			else{
+				// token valid, find friends
+				if (req.body.username.includes("@")) {
+			    	//search by email
+			    	User.find({email:{ $regex: usernameQuery, $options: 'i' }}, function(err, users){
+			            console.log(users)
+			    		if (err){
+			                // to do later
+			            }
+			            else{
+			            	res.json(users.filter(function(u){
+			            		return u.email !== userdata.email
+			            	}))
+			               
+			            }
+			    	})
+			    }
+
+			    else{
+			    	//search by username
+			    	User.find({username:{ $regex: usernameQuery, $options: 'i' }}, function(err, users){
+			    		console.log(users)
+			    		if (err){
+			                // to do later
+			            }
+			            else{
+			            	res.json(users.filter(function(u){
+			            		return u.email !== userdata.email
+			            	}))
+			            }
+			    	})
+			    }
+			}
+		})
+    }
 }
 
 function getStream(req, res) {
@@ -297,6 +314,7 @@ function getStreams(req, res){
 function addFriend(req, res) {
 	var token = req.cookies.Snippet
 	var req_friend = req.body.friend_username
+	console.log(req_friend)
 	verifyToken(token, function(err, userdata) {
 		if(err) {
 			// invalid token, go to login
