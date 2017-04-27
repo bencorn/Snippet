@@ -16,6 +16,18 @@ angular.module('SnippetMain', []).controller('SnippetMain', function($scope, $ht
 			});
 	};
     
+	// Add song to the user's stream
+	vm.addSong = function(song_id) {
+		console.log(song_id);
+		var req = song_id;
+		// POST Query to Snippet API
+		$http.post('/api/user/addSongtoStream', req)
+			.then(function (result) {
+				// Assign VM property Song results to resulting JSON
+				vm.Streams = result.data;
+			});
+	};
+	
     vm.CreateTriggerEvent = function(){
         $('.list-group-item').click(function(){
             $('.collapse').collapse('hide');
