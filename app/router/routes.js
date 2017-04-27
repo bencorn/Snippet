@@ -296,7 +296,7 @@ function getStreams(req, res){
                                         resolve('Data Fetched');
                                     
                                       }, function(err) {
-                                      	friendStreams.push(friendData.toObject());
+                                      	// friendStreams.push(friendData.toObject());
                                         resolve('No Data Fetched')
                                       });   
                             }
