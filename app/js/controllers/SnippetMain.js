@@ -13,6 +13,7 @@ angular.module('SnippetMain', []).controller('SnippetMain', function($scope, $ht
 			.then(function (resp) {
                 // Assign VM Property Song Results to resulting JSON
 				vm.SongResults = resp.data;
+                $('.song-results').perfectScrollbar('update');
 			});
 	};
     
@@ -63,6 +64,7 @@ angular.module('SnippetMain', []).controller('SnippetMain', function($scope, $ht
 			.then(function (resp) {
 				console.log(resp.data)
 				vm.userStream = resp.data;
+                $('.my-snippets').perfectScrollbar('update');
 			})
     }
 
@@ -71,10 +73,6 @@ angular.module('SnippetMain', []).controller('SnippetMain', function($scope, $ht
     	$http.get('/api/user/getStreams')
 			.then(function (resp) {
 				vm.Streams = resp.data;
-            
-                $('.list-group-item').on('click', function() {
-                    console.log('good')
-                })
 			});
     }
 
@@ -96,6 +94,7 @@ angular.module('SnippetMain', []).controller('SnippetMain', function($scope, $ht
                 vm.Search();
             }
         });
+        
         // Loading User Streams on Initial Page Load
         vm.getUserStream();
         // map search button to getStream
@@ -111,6 +110,7 @@ angular.module('SnippetMain', []).controller('SnippetMain', function($scope, $ht
                 vm.SearchUsers()
             }
         });
+        
         // Loading Friend Streams on Initial Page Load
         vm.getFriendsStreams()
         // map search button to getFriendsStream
@@ -119,6 +119,9 @@ angular.module('SnippetMain', []).controller('SnippetMain', function($scope, $ht
                 vm.getFriendsStreams()
             }
         });
+        
+        $('.my-snippets').perfectScrollbar();
+        $('.song-results').perfectScrollbar();
 
         // Stop Other Player When New Player Selected
 	    document.addEventListener('play', function (e) {
