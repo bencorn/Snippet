@@ -130,6 +130,26 @@
                                 <input placeholder="Enter a username or email" type="text" class="form-control friend-search" ng-model="vm.FriendQuery" />
                             </div>
                         </form>
+                        <br>
+                        <div ng-show="vm.Users" style="max-height: 100%; overflow: auto;" class="card">
+						  <ul id="accordian" class="list-group">
+							<div>
+                                <li class="list-group-item">
+                                    <div class="snippet-details p-2">
+                                        <span class="lead">{{vm.Users.name}}</span><br>
+                                        <span class="text-muted">{{vm.Users.email}}</span>
+                                    </div>                                   
+                                    <div class="ml-auto p-2">
+                                        <div class="dropdown">
+                                            <button ng-click="vm.AddFriend(vm.Users.email)" data-toggle="dropdown" class="btn btn-outline-primary btn-circle">
+                                            <i class="fa fa-plus" aria-hidden="true"></i>
+                                        </button>
+                                        </div>
+                                    </div>
+                                </li>
+                            </div>
+						  </ul>
+						</div>
 					</div>
 				</div>
 			</div>

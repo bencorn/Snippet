@@ -36,7 +36,23 @@ angular.module('SnippetMain', []).controller('SnippetMain', function($scope, $ht
     }
     
     vm.SearchUsers = function(){
-        console.log(vm.FriendQuery);
+        var req = {username: vm.FriendQuery};
+		// POST Query to Snippet API
+		$http.post('/api/users/search', req)
+			.then(function (result) {
+				// Assign VM property Song results to resulting JSON
+				vm.Users = result.data;
+			});
+    }
+    
+    vm.AddFriend = function(email){
+        var req = {friend_username: email};
+		// POST Query to Snippet API
+		$http.post('/api/user/addFriend', req)
+			.then(function (result) {
+				// Assign VM property Song results to resulting JSON
+				vm.Friends = result.data;
+			});
     }
 
 	$(function () {

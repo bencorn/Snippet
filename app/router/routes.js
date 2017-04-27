@@ -28,6 +28,7 @@ function initapp (app) {
 	app.post('/api/user/register', registerUser);
 	app.post('/api/user/login', loginUser);
 	app.post('/api/user/addFriend', addFriend);
+    app.post('/api/users/search', searchUsers);
 	app.post('/api/user/addSongtoStream', addSongtoStream);
 }
 
@@ -203,6 +204,24 @@ function getFriends(req, res) {
 	})
 }
 
+function searchUsers(req, res){
+    var username = req.body.username;
+    
+    User.findOne({email: username}, function(err, user){
+            if (err){
+                // to do later
+            }
+            else{
+                if (user){
+                    res.json(user.toObject());
+                }
+                else{
+                    res.json('');
+                }
+            }
+    }); 
+}
+
 function getStream(req, res) {
 	var token = req.cookies.Snippet
 	verifyToken(token, function(err, userdata) {
@@ -233,6 +252,7 @@ function getStreams(req, res){
 
                 var userFriends = userData.friends.toObject();
                 var friendStreams = [];
+                var promiseArray = [];
 
                 var SpotifyWebApi = require('spotify-web-api-node');
 
@@ -241,26 +261,31 @@ function getStreams(req, res){
 
                 for (var i = 0; i < userFriends.length; i++){
 
-                    User.findOne({email: userFriends[i]}, function(err, friendData){
-                        if (err){
-                            console.log("Error finding friend with email " + userFriends[i]);
-                        }
-                        else{                                                       
-                            spotifyApi.getTracks(friendData.stream)
-                                .then(function(data) {
-                                    var ind = i;
-                                    friendData.stream = data.body;
-                                    friendStreams.push(friendData.toObject());
-
-                                    if (i == userFriends.length){
-                                        res.json(friendStreams);
-                                    }
-                                  }, function(err) {
-
-                                  });          
-                        }
-                    })
-                }      
+                    promiseArray.push(new Promise(function(resolve, reject){
+                        User.findOne({email: userFriends[i]}, function(err, friendData){
+                            if (err){
+                                console.log("Error finding friend with email " + userFriends[i]);
+                            }
+                            else{                                                       
+                                spotifyApi.getTracks(friendData.stream)
+                                    .then(function(data) {
+                                        var ind = i;
+                                        friendData.stream = data.body;
+                                        friendStreams.push(friendData.toObject());
+                                        resolve('Data Fetched');
+                                    
+                                      }, function(err) {
+                                        resolve('No Data Fetched')
+                                      });   
+                            }
+                        })
+                    }));
+                }
+                
+                Promise.all(promiseArray)
+                    .then(function(){
+                        res.json(friendStreams); 
+                });
             }
 	}) 
 })     
