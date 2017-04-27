@@ -380,8 +380,14 @@ function removeSongfromStream(req, res) {
 			var email = userdata.email
 			var new_stream = userdata.stream
 			if (new_stream.includes(req_song)) {
-				var i = new_stream.indexOf(req_song)
-				new_stream.splice(i,1)
+				if(new_stream.length > 1){
+					var i = new_stream.indexOf(req_song)
+					new_stream.splice(i,1)	
+				}
+				else{
+					//last element, clear the stream
+					new_stream = []
+				}
 			}
 			User.findOneAndUpdate({email:email}, {stream: new_stream}, {upsert:false}, function(err, result){
 				if (err) {
