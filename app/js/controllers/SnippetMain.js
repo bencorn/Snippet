@@ -19,7 +19,7 @@ angular.module('SnippetMain', []).controller('SnippetMain', function($scope, $ht
 	// Add song to the user's stream
 	vm.addSong = function(song_id) {
 		console.log(song_id);
-		var req = song_id;
+		var req = {song_id: song_id};
 		// POST Query to Snippet API
 		$http.post('/api/user/addSongtoStream', req)
 			.then(function (result) {

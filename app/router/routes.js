@@ -121,7 +121,6 @@ function registerUser(req, res){
 		if(err) {
 			// user has registered before
 			console.log(err)
-			console.log('\n\n\n')
 		}
 		else {
 			// new user, add auth token and pass to index
@@ -130,7 +129,6 @@ function registerUser(req, res){
 				name: name
 			})
 			Auth.createToken(newAuth, password, function(err, token){
-				console.log('c')
 				if (!err) {
 					newJWT = token.generateJwt()
 					res.cookie('Snippet', newJWT)
@@ -161,7 +159,6 @@ function getHome(req, res) {
 		}
 		else{
 			// token valid, send to index
-			console.log(userdata)
 			res.render('index')
 		}
 	})
@@ -299,7 +296,10 @@ function addFriend(req, res) {
 		}
 		else{
 			// token valid, update friends
-			User.update(userdata,{friends: userdata.friends.push(friend_username)}, function(err, result){
+			var email = userdata.email
+			var new_friend = userdata.friends
+			new_friend.push(req_friend)
+			User.findOneAndUpdate({email:email}, {friends: new_friend},  {upsert:false}, function(err, result){
 				if (err){
 					res.json({ error: err })
 				}
@@ -320,8 +320,11 @@ function addSongtoStream(req, res) {
 			res.json({error:'invalid token'})
 		}
 		else{
-			// token valid, update stream
-			User.update(userdata,{stream: userdata.stream.push(req_song)}, function(err, result){
+			// token valid, update user's stream
+			var email = userdata.email
+			var new_stream = userdata.stream
+			new_stream.push(req_song)
+			User.findOneAndUpdate({email:email}, {stream: new_stream}, {upsert:false}, function(err, result){
 				if (err) {
 					res.json({ error: err }) 
 				}
