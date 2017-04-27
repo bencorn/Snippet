@@ -60,6 +60,31 @@ function verifyToken(token_string, callback) {
 	}
 }
 
+function getUserEmail(token_string) {
+    
+		var promise = new Promise(function(resolve, reject){
+            Auth.decodeToken(token_string, function(err, decoded) {
+                if(err){
+                    reject('Decode failure');
+                }
+                else{
+                    // token is up to date, check if data valid
+                    User.findOne({email: decoded.email}, function (err, userdata) {
+                        if(err || userdata === null){
+                            return '';
+                        }
+                        else{
+                            // data valid, send to index
+                            resolve(decoded.email);
+                        }
+                    })
+                }
+          })
+    })
+    
+    return promise;
+}
+
 function spotifySearch(req, res){
 console.log(req.body);
      var req_obj = req.body;
@@ -193,97 +218,48 @@ function getStream(req, res) {
 }
 
 function getStreams(req, res){
-    var streams = [
-      {
-          userId : 1,
-          albumCover : 'http://www.billboard.com/files/styles/900_wide/public/media/Beyonce-Beyonce-greatest-album-covers-billboard-1000x1000.jpg',
-          userName : 'Benjamin Corn',
-          time : '33m ago',
-          snippets : [
-            {
-                songId : '345435',
-                streamSrc : 'https://p.scdn.co/mp3-preview/1cb344e49f240ec1ae951c074f50fc9cb8c46216?cid=null',
-                albumCover : 'https://static.gigwise.com/gallery/5209864_8262181_JasonDeruloTatGall.jpg',
-                songTitle : 'Tat Gall',
-                artistName : 'Jason Derulo'
-            },
-            {
-                songId : '5675',
-                streamSrc : 'https://p.scdn.co/mp3-preview/1cb344e49f240ec1ae951c074f50fc9cb8c46216?cid=null',
-                albumCover : 'http://www.fuse.tv/image/56fe73a1e05e186b2000009b/768/512/the-boxer-rebellion-ocean-by-ocean-album-cover-full-size.jpg',
-                songTitle : 'Ocean',
-                artistName : 'The Boxer Rebellion'
-            },
-            {
-                songId : '65756',
-                streamSrc : 'https://p.scdn.co/mp3-preview/1cb344e49f240ec1ae951c074f50fc9cb8c46216?cid=null',
-                albumCover : 'https://cdn.pastemagazine.com/www/system/images/photo_albums/album-covers/large/album4chanceacidrap.jpg?1384968217',
-                songTitle : 'Acid Rap',
-                artistName : 'Chance'
-            }
-          ]
-      },
-      {
-          userId : 2,
-          albumCover : 'http://illusion.scene360.com/wp-content/uploads/2014/10/computergraphics-album-covers-2014-15.jpg',
-          userName : 'Ben Chen',
-          time : '1hr ago',
-          snippets : [
-            {
-                songId : '4565',
-                streamSrc : 'https://p.scdn.co/mp3-preview/1cb344e49f240ec1ae951c074f50fc9cb8c46216?cid=null',
-                albumCover : 'http://androidjones.com/wp-content/uploads/2012/05/HOPE-1024x1024.jpg',
-                songTitle : 'Hope',
-                artistName : 'The Losers'
-            },
-            {
-                songId : '223445',
-                streamSrc : 'https://p.scdn.co/mp3-preview/1cb344e49f240ec1ae951c074f50fc9cb8c46216?cid=null',
-                albumCover : 'https://www.smashingmagazine.com/images/music-cd-covers/27.jpg',
-                songTitle : 'Shrooms',
-                artistName : 'The Growers'
-            },
-            {
-                songId : '234234',
-                streamSrc : 'https://p.scdn.co/mp3-preview/1cb344e49f240ec1ae951c074f50fc9cb8c46216?cid=null',
-                albumCover : 'https://cdn.pastemagazine.com/www/system/images/photo_albums/bestalbumcovers/large/tv-on-the-radio-happy-idiot-00.jpg?1384968217',
-                songTitle : 'Mary Janes',
-                artistName : 'The Smokers'
-            }
-          ]
-      },
-      {
-          userId : 3,
-          albumCover : 'https://imgix.ranker.com/node_img/101/2009619/original/sgt-pepper-s-lonely-hearts-club-band-albums-photo-1?w=650&q=50&fm=jpg',
-          userName : 'Namir Fuzzy',
-          time : '2hr ago',
-          snippets : [
-            {
-                songId : '234234',
-                streamSrc : 'https://p.scdn.co/mp3-preview/1cb344e49f240ec1ae951c074f50fc9cb8c46216?cid=null',
-                albumCover : 'https://s-media-cache-ak0.pinimg.com/736x/de/b5/8f/deb58ff0be3b4238ec3d1b4f96538627.jpg',
-                songTitle : 'Shrubs',
-                artistName : 'Bob Marley'
-            },
-            {
-                songId : '23423',
-                streamSrc : 'https://p.scdn.co/mp3-preview/1cb344e49f240ec1ae951c074f50fc9cb8c46216?cid=null',
-                albumCover : 'http://exclaim.ca/images/14worst.jpg',
-                songTitle : 'Hope',
-                artistName : 'The Umbrellas'
-            },
-            {
-                songId : '234234',
-                streamSrc : 'https://p.scdn.co/mp3-preview/1cb344e49f240ec1ae951c074f50fc9cb8c46216?cid=null',
-                albumCover : 'http://cdn2.pitchfork.com/news/50138/021544fb.jpg',
-                songTitle : 'Wolf',
-                artistName : 'Tyler the Creator'
-            }
-          ]
-      }
-    ];
     
-    res.json(streams);
+    getUserEmail(req.cookies['Snippet'])
+        .then(function(email){
+            User.findOne({email:email}, function (err, userData) {
+            if (err){
+                console.log("no email")
+            }
+            else{
+
+                var userFriends = userData.friends.toObject();
+                var friendStreams = [];
+
+                var SpotifyWebApi = require('spotify-web-api-node');
+
+               // credentials are optional
+                var spotifyApi = new SpotifyWebApi();
+
+                for (var i = 0; i < userFriends.length; i++){
+
+                    User.findOne({email: userFriends[i]}, function(err, friendData){
+                        if (err){
+                            console.log("Error finding friend with email " + userFriends[i]);
+                        }
+                        else{                                                       
+                            spotifyApi.getTracks(friendData.stream)
+                                .then(function(data) {
+                                    var ind = i;
+                                    friendData.stream = data.body;
+                                    friendStreams.push(friendData.toObject());
+
+                                    if (i == userFriends.length){
+                                        res.json(friendStreams);
+                                    }
+                                  }, function(err) {
+
+                                  });          
+                        }
+                    })
+                }      
+            }
+	}) 
+})     
 }
 
 function addFriend(req, res) {
