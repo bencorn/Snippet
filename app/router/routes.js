@@ -324,7 +324,9 @@ function addFriend(req, res) {
 			// token valid, update friends
 			var email = userdata.email
 			var new_friend = userdata.friends
-			new_friend.push(req_friend)
+			if (!new_friend.includes(req_friend)) {
+				new_friend.push(req_friend)
+			}
 			User.findOneAndUpdate({email:email}, {friends: new_friend},  {upsert:false}, function(err, result){
 				if (err){
 					res.json({ error: err })
@@ -349,7 +351,9 @@ function addSongtoStream(req, res) {
 			// token valid, update user's stream
 			var email = userdata.email
 			var new_stream = userdata.stream
-			new_stream.push(req_song)
+			if (!new_stream.includes(req_song)) {
+				new_stream.push(req_song)
+			}
 			User.findOneAndUpdate({email:email}, {stream: new_stream}, {upsert:false}, function(err, result){
 				if (err) {
 					res.json({ error: err }) 

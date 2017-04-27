@@ -28,6 +28,7 @@ angular.module('SnippetMain', []).controller('SnippetMain', function($scope, $ht
 				vm.Streams = result.data;
 			});
 		vm.getUserStream()
+		vm.getFriendsStreams()
 	};
 	
     vm.CreateTriggerEvent = function(){
