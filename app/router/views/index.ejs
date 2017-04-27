@@ -50,7 +50,7 @@
                                     </div>
                                     <div class="p-2">
                                         <div class="dropdown">
-                                            <button ng-click="vm.AddStream(s.songId)" data-toggle="dropdown" class="btn btn-outline-primary btn-circle">
+                                            <button ng-click="vm.addSong(song.id)" data-toggle="dropdown" class="btn btn-outline-primary btn-circle">
                                             <i class="fa fa-plus" aria-hidden="true"></i>
                                         </button>
 <!--
@@ -110,7 +110,8 @@
                                         </audio>
                                     </td>
 									<td>
-										<a href="" ng-click="vm.addSong(song.id)"><i class="fa fa-plus" aria-hidden="true"></i></a>
+										<button ng-click="vm.addSong(song.id)" data-toggle="dropdown" class="btn btn-outline-primary btn-circle">
+										<i class="fa fa-plus" aria-hidden="true"></i>
 									</td>
                                 </tr>
                             </tbody>
