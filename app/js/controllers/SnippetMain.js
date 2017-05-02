@@ -17,8 +17,8 @@ angular.module('SnippetMain', []).controller('SnippetMain', function($scope, $ht
 			});
 	};
 
+    // Loading User Streams
     vm.getUserStream = function(){
-        // Loading User Streams
 	    $http.get('/api/user/getStream')
 			.then(function (resp) {
 				console.log(resp.data)
@@ -26,6 +26,15 @@ angular.module('SnippetMain', []).controller('SnippetMain', function($scope, $ht
                 $('.my-snippets').perfectScrollbar('update');
 			})
     }
+
+    // get user info to push to front page
+	vm.getUserInfo = function () {
+		var welcome = ["Hello ", "Hi ", "Hey ", "Whatsup "][Math.floor(Math.random() * 4)]
+		$http.get('/api/user/info')
+			.then(function (resp) {
+				vm.welcomeMessage = welcome + resp.data.username + '!'
+			})
+	}
     
 	// Add song to the user's stream
 	vm.addSong = function(song_id) {
@@ -84,8 +93,8 @@ angular.module('SnippetMain', []).controller('SnippetMain', function($scope, $ht
 			});
     }
 
+    // Loading Friend Streams
     vm.getFriendsStreams = function() {
-    	// Loading Friend Streams
     	$http.get('/api/user/getStreams')
 			.then(function (resp) {
 				vm.Streams = resp.data;
@@ -104,7 +113,10 @@ angular.module('SnippetMain', []).controller('SnippetMain', function($scope, $ht
 			dragAndMove: true,
 			verticalCentered: false
 		});
-        
+
+        // Loading User data on Initial Page Load
+		vm.getUserInfo()
+
         $(".song-search").keyup(function(event){
             if(event.keyCode == 13){
                 vm.Search();

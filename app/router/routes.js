@@ -11,17 +11,16 @@ var passport = require('passport');
 var LocalStrategy = require('passport-local');
 var FacebookStrategy = require('passport-facebook');
 var validator = require('validator');
+var config = require("../../config/config.json")
 
 function initapp (app) {
 	app.get('/', getHome);
 	app.get('/register', getRegister);
 	app.get('/login',getLogin);
 	app.get('/logout',getLogout);
+	app.get('/api/user/info',getUserInfo);
 	// app.get('/test', getTest);
 	app.get('/auth/facebook',passport.authenticate('facebook'));
-	app.get('/auth/facebook/callback',
-		passport.authenticate('facebook', {successRedirect: '/', failureRedirect:'/login'}));
-    
     app.get('/api/user/getStreams', getStreams);
 	app.get('/api/user/getStream', getStream);
 	// app.post('/test', postTest);
@@ -33,6 +32,19 @@ function initapp (app) {
 	app.post('/api/user/addSongtoStream', addSongtoStream);
 	app.post('/api/user/removeSongfromStream', removeSongfromStream);
 }
+
+passport.use(new FacebookStrategy({
+    clientID: FACEBOOK_APP_ID,
+    clientSecret: FACEBOOK_APP_SECRET,
+    callbackURL: "http://localhost:3000/auth/facebook/callback"
+  },
+  function(accessToken, refreshToken, profile, cb) {
+    User.findOrCreate({ facebookId: profile.id }, function (err, user) {
+      return cb(err, user);
+    });
+  }
+));
+
 
 function verifyToken(token_string, callback) {
 	// takes in the token string (stored in req.cookies.snippet) and returns boolean,data
@@ -247,6 +259,20 @@ function getHome(req, res) {
 		else{
 			// token valid, send to index
 			res.render('index.ejs')
+		}
+	})
+}
+
+function getUserInfo(req, res) {
+	var token = req.cookies.Snippet
+	verifyToken(token, function(err, userdata) {
+		if(err) {
+			// invalid token, go to login
+			res.json({error:'invalid token'})
+		}
+		else{
+			// token valid, send userdata
+			res.json(userdata)
 		}
 	})
 }
