@@ -220,14 +220,15 @@ function getLogout(req, res){
 
 function getLogin(req, res){
 	var token = req.cookies.Snippet
+	console.log("logging")
 	verifyToken(token, function(err, userdata) {
 		if(err) {
-			// valid token, go to index instead
-			res.redirect('/')
-		}
-		else{
 			// token invalid, send to login
 			res.render('login.ejs')
+		}
+		else{
+			// valid token, go to index instead
+			res.redirect('/')
 		}
 	})
 }
