@@ -21,7 +21,12 @@ function initapp (app) {
 	app.get('/api/user/info',getUserInfo);
 	// app.get('/test', getTest);
 	app.get('/auth/facebook',passport.authenticate('facebook'));
-    app.get('/api/user/getStreams', getStreams);
+	app.get('/auth/facebook/callback',
+		passport.authenticate('facebook', { failureRedirect: '/login' }), function(req, res) {
+			// Successful authentication, redirect home.
+				res.redirect('/');
+			});
+	app.get('/api/user/getStreams', getStreams);
 	app.get('/api/user/getStream', getStream);
 	// app.post('/test', postTest);
 	app.post('/api/spotify/search', spotifySearch);
@@ -33,15 +38,20 @@ function initapp (app) {
 	app.post('/api/user/removeSongfromStream', removeSongfromStream);
 }
 
+var FACEBOOK_APP_ID = config.Facebook_App_ID
+var FACEBOOK_APP_SECRET = config.Facebook_App_Secret
+var FACEBOOK_APP_CALLBACK = config.Facebook_App_CallbackURL
+
 passport.use(new FacebookStrategy({
     clientID: FACEBOOK_APP_ID,
     clientSecret: FACEBOOK_APP_SECRET,
-    callbackURL: "http://localhost:3000/auth/facebook/callback"
+    callbackURL: FACEBOOK_APP_CALLBACK
   },
   function(accessToken, refreshToken, profile, cb) {
-    User.findOrCreate({ facebookId: profile.id }, function (err, user) {
-      return cb(err, user);
-    });
+    console.log(accessToken)
+    console.log(refreshToken)
+    console.log(profile)
+    cb(profile)
   }
 ));
 
