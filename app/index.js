@@ -29,7 +29,7 @@ app.use(passport.session());
 // View Engine
 app.set('view engine', 'ejs')
 // directory for serving views
-app.set('views', path.join(__dirname, 'router/views'))
+app.set('views', path.join(__dirname, 'views'))
 
 app.use('/bower_components', express.static(path.join(__dirname, 'bower_components/')))
 app.use('/js', express.static(path.join(__dirname, 'js/')))

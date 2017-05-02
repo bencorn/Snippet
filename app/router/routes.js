@@ -10,11 +10,13 @@ var User = require('../models/user');
 var passport = require('passport');
 var LocalStrategy = require('passport-local');
 var FacebookStrategy = require('passport-facebook');
+var validator = require('validator');
 
 function initapp (app) {
 	app.get('/', getHome);
 	app.get('/register', getRegister);
 	app.get('/login',getLogin);
+	app.get('/logout',getLogout);
 	// app.get('/test', getTest);
 	app.get('/auth/facebook',passport.authenticate('facebook'));
 	app.get('/auth/facebook/callback',
@@ -104,72 +106,130 @@ function spotifySearch(req, res){
 }
 
 function loginUser(req, res){
-	var email = req.body.username;
-	var password = req.body.password;
-	
+
 	// Implement Login with Passport (Normal, Not Facebook)
-		
-	Auth.findOne({email:email}, function (err, authdata) {
-		if (err || authdata === null){
-			//email not found
-			console.log("no email")
+	var email = req.body.email;
+	var password = req.body.password;
+
+	if(!(typeof email === 'string' && typeof password === 'string')){
+			res.json({success:false, message:"Please check if you filled out everything"})
 		}
-		else{
-			if (!authdata.validPassword(password)){
-				//password invalid
-				console.log("bad password")
-			}
-			else{
-				//credentials OK, send jwt and log on
-				newJWT = authdata.generateJwt()
-				res.cookie('Snippet', newJWT)
-				res.send('/')
-			}
+
+	else{
+		if (validator.isAlphanumeric(password) &&
+			validator.isEmail(email) && 
+			validator.isLength(password, {min:8, max:64})) {
+			Auth.findOne({email:email}, function (err, authdata) {
+				if (err || authdata === null){
+					//email not found
+					console.log("no email")
+					res.json({success:false, message:"This email is not registered with Snippet"})
+				}
+				else{
+					if (!authdata.validPassword(password)){
+						//password invalid
+						console.log("bad password")
+						res.json({success:false, message:"Incorrect Username/Password"})
+					}
+					else{
+						//credentials OK, send jwt and log on
+						newJWT = authdata.generateJwt()
+						res.cookie('Snippet', newJWT)
+						res.json({success:true, location:"/"})
+					}
+				}
+			})
+
+		} else {
+			//bad input
+			res.json({success:false, message:"Incorrect Username/Password"})
 		}
-	})
+	}
 }
 
 function registerUser(req, res){
-	var name = req.body.name;
+	var name = req.body.username;
+	var username = req.body.username;
 	var email = req.body.email;
-	var username = req.body.username.split("@")[0];
 	var password = req.body.password;
+	var passwordCheck = req.body.passwordCheck;
 	
-	var newUser = new User({
-		username: username,
-		email: email,
-		name: name
-		// friends: []
-		// stream: []
-	});
+	if(!(typeof username === 'string' && typeof email === 'string' && typeof password === 'string' && typeof passwordCheck === 'string')){
+		res.json({success:false, message:"Please check if you filled out everything"})
+	}
+	else if (!validator.isEmail(email)){
+		res.json({success:false, message:"This email is invalid"})
+	}	
+	else if (!validator.isAlphanumeric(username)) {
+		res.json({success:false, message:"This username is invalid"})
+	}
+	else if (!validator.isAlphanumeric(password)) {
+		res.json({success:false, message:"Password must include alphanumeric characters"})
+	}
+	else if (!validator.isLength(password, {min:8, max:64})) {
+		res.json({success:false, message:"Password must only include 8 to 64 characters"})
+	}
+	else if (!validator.equals(password,passwordCheck)) {
+		res.json({success:false, message:"Passwords do not match"})
+	}
+	else{
 
-	newUser.save(function(err) {
-		if(err) {
-			// user has registered before
-			console.log(err)
-		}
-		else {
-			// new user, add auth token and pass to index
-			var newAuth = new Auth({
-				email: email,
-				name: name
-			})
-			Auth.createToken(newAuth, password, function(err, token){
-				if (!err) {
-					newJWT = token.generateJwt()
-					res.cookie('Snippet', newJWT)
-					res.send('/')
-				}
-				else{
-					console.log(err)
-				}
-			})
-		}
-	})
+		var newUser = new User({
+			username: username,
+			email: email,
+			name: name
+			// friends: []
+			// stream: []
+		});
+
+		newUser.save(function(err) {
+			if(err) {
+				// user has registered before
+				console.log(err)
+				res.json({success:false, message:"This email is already registered with Snippet"})
+			}
+			else {
+				// new user, add auth token and pass to index
+				var newAuth = new Auth({
+					email: email,
+					name: name
+				})
+				Auth.createToken(newAuth, password, function(err, token){
+					if (!err) {
+						newJWT = token.generateJwt()
+						res.cookie('Snippet', newJWT)
+						res.send('/')
+						res.json({success:true, location:"/"})
+					}
+					else{
+						//token encoutered error
+						console.log(err)
+						res.json({success:false, message:"Server has encountered an error, please try again later"})
+					}
+				})
+			}
+		})
+	}
+}
+
+
+function getLogout(req, res){
+	res.clearCookie("Snippet")
+	res.redirect('/login')
 }
 
 function getLogin(req, res){
-	res.render("login.ejs");
+	var token = req.cookies.Snippet
+	verifyToken(token, function(err, userdata) {
+		if(err) {
+			// valid token, go to index instead
+			res.redirect('/')
+		}
+		else{
+			// token invalid, send to login
+			res.render('login.ejs')
+		}
+	})
 }
 
 function getRegister(req, res){
@@ -185,7 +245,7 @@ function getHome(req, res) {
 		}
 		else{
 			// token valid, send to index
-			res.render('index')
+			res.render('index.ejs')
 		}
 	})
 }
