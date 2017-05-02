@@ -7,31 +7,28 @@ angular.module('SnippetLogin', []).controller('SnippetLogin', function($scope, $
 
 		vm.errorMessage = false
 
-		if(vm.User === undefined){
+		if(vm.User === undefined || vm.User.Name === undefined || vm.User.Password === undefined || vm.User.Email === undefined || vm.User.PasswordCheck === undefined){
 			vm.errorMessage = 'Please check if you filled out everything'
 		}
 		else{
+			
 			var req = {
 				'username': vm.User.Name,
 				'email': vm.User.Email,
 				'password': vm.User.Password,
 				'passwordCheck': vm.User.PasswordCheck
 			}
+
+			$http.post('/api/user/register', req)
+				.then(function(res){
+					if(res.data.success){
+				    	window.location = res.data.location;
+					}
+					else{
+						vm.errorMessage = res.data.message
+					}
+				});
 			
-			if(!(typeof vm.User.Name === 'string' && typeof vm.User.Email === 'string' && typeof vm.User.Password === 'string' && typeof vm.User.PasswordCheck === 'string')){
-				vm.errorMessage = 'Please check if you filled out everything'
-			}
-			else{
-				$http.post('/api/user/register', req)
-					.then(function(res){
-						if(res.data.success){
-					    	window.location = res.data.location;
-						}
-						else{
-							vm.errorMessage = res.data.message
-						}
-					});
-			}
 		}
 	}
 	

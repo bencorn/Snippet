@@ -164,10 +164,10 @@ function registerUser(req, res){
 		res.json({success:false, message:"This username is invalid"})
 	}
 	else if (!validator.isAlphanumeric(password)) {
-		res.json({success:false, message:"Password must include alphanumeric characters"})
+		res.json({success:false, message:"Password must only include alphanumeric characters"})
 	}
 	else if (!validator.isLength(password, {min:8, max:64})) {
-		res.json({success:false, message:"Password must only include 8 to 64 characters"})
+		res.json({success:false, message:"Password must include 8 to 64 characters"})
 	}
 	else if (!validator.equals(password,passwordCheck)) {
 		res.json({success:false, message:"Passwords do not match"})
@@ -198,7 +198,6 @@ function registerUser(req, res){
 					if (!err) {
 						newJWT = token.generateJwt()
 						res.cookie('Snippet', newJWT)
-						res.send('/')
 						res.json({success:true, location:"/"})
 					}
 					else{
@@ -219,18 +218,19 @@ function getLogout(req, res){
 }
 
 function getLogin(req, res){
-	var token = req.cookies.Snippet
-	console.log("logging")
-	verifyToken(token, function(err, userdata) {
-		if(err) {
-			// token invalid, send to login
-			res.render('login.ejs')
-		}
-		else{
-			// valid token, go to index instead
-			res.redirect('/')
-		}
-	})
+	// var token = req.cookies.Snippet
+	// verifyToken(token, function(err, userdata) {
+	// 	if(err) {
+	// 		// token invalid, send to login
+	// 		res.render('login.ejs')
+	// 	}
+	// 	else{
+	// 		// valid token, go to index instead
+	// 		res.redirect('/')
+	// 	}
+	// })
+	res.render('login.ejs')
+
 }
 
 function getRegister(req, res){
