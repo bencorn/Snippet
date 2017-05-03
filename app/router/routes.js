@@ -61,7 +61,7 @@ passport.use(new FacebookStrategy({
   	// done must return a user profile for verify ** cb(profile) **
     
     // attempt to find auth token
-    Auth.findOne({email:profile._json.email, fb_authed:true}, function (err, authdata) {
+    Auth.findOne({email:profile._json.email}, function (err, authdata) {
     	
     	if (err || authdata === null){
     		//token not found, generate new token and user and return jwt in cb
@@ -170,7 +170,6 @@ function getUserEmail(token_string) {
 }
 
 function spotifySearch(req, res){
-	console.log(req.body);
 	var req_obj = req.body;
 	var SpotifyWebApi = require('spotify-web-api-node');
 
@@ -200,23 +199,31 @@ function loginUser(req, res){
 		if (validator.isAlphanumeric(password) &&
 			validator.isEmail(email) && 
 			validator.isLength(password, {min:8, max:64})) {
-			Auth.findOne({email:email, fb_authed:false}, function (err, authdata) {
+			Auth.findOne({email:email}, function (err, authdata) {
 				if (err || authdata === null){
 					//email not found
 					console.log("no email")
 					res.json({success:false, message:"This email is not registered with Snippet"})
 				}
 				else{
-					if (!authdata.validPassword(password)){
-						//password invalid
-						console.log("bad password")
-						res.json({success:false, message:"Incorrect Username/Password"})
+					if (authdata.fb_authed) {
+						//profile is set up with fb
+						console.log("fb email")
+						res.json({success:false, message:"This email is in use through Facebook"})
+
 					}
-					else{
-						//credentials OK, send jwt and log on
-						newJWT = authdata.generateJwt()
-						res.cookie('Snippet', newJWT)
-						res.json({success:true, location:"/"})
+					else{	
+						if (!authdata.validPassword(password)){
+							//password invalid
+							console.log("bad password")
+							res.json({success:false, message:"Incorrect Username/Password"})
+						}
+						else{
+							//credentials OK, send jwt and log on
+							newJWT = authdata.generateJwt()
+							res.cookie('Snippet', newJWT)
+							res.json({success:true, location:"/"})
+						}
 					}
 				}
 			})
@@ -361,11 +368,10 @@ function searchUsers(req, res){
 				res.json({error:'invalid token'})
 			}
 			else{
-				// token valid, find friends
+				// token valid, find users
 				if (req.body.username.includes("@")) {
 			    	//search by email
 			    	User.find({email:{ $regex: usernameQuery, $options: 'i' }}, function(err, users){
-			            console.log(users)
 			    		if (err){
 			                // to do later
 			            }
@@ -379,8 +385,8 @@ function searchUsers(req, res){
 			    }
 
 			    else{
-			    	//search by username
-			    	User.find({username:{ $regex: usernameQuery, $options: 'i' }}, function(err, users){
+			    	//search by username or name
+			    	User.find( {$or:[{name:{ $regex: usernameQuery, $options: 'i' }}, {username:{ $regex: usernameQuery, $options: 'i' }}]}, function(err, users){
 			    		console.log(users)
 			    		if (err){
 			                // to do later
