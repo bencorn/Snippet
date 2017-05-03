@@ -6,6 +6,8 @@ var crypto = require('crypto');
 var jwt = require('jsonwebtoken');
 var config = require('../../../config/config.json')
 
+var jwtsecret = process.env.JWT_SECRET || config.jwtsecret
+
 var authSchema = new mongoose.Schema({
 	email: {
 		type: String,
@@ -35,7 +37,7 @@ authSchema.methods.generateJwt = function() {
     email: this.email,
     name: this.name,
     exp: parseInt(expiry.getTime() / 1000),
-  }, config.jwtsecret); // Move to config?
+  }, jwtsecret); // Move to config?
 };
 
 var Auth = module.exports = mongoose.model('Auth', authSchema);
@@ -47,7 +49,7 @@ module.exports.createToken = function(token,password, callback){
 }
 
 module.exports.decodeToken = function(token, callback){
-  jwt.verify(token, config.jwtsecret, function(err, decoded) {
+  jwt.verify(token, jwtsecret, function(err, decoded) {
     if(err){callback(true, err)}
     callback(false, decoded)
   })

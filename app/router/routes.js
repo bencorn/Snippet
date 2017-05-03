@@ -39,9 +39,9 @@ function initapp (app) {
 	app.post('/api/user/removeSongfromStream', removeSongfromStream);
 }
 
-var FACEBOOK_APP_ID = config.Facebook_App_ID
-var FACEBOOK_APP_SECRET = config.Facebook_App_Secret
-var FACEBOOK_APP_CALLBACK = config.Facebook_App_CallbackURL
+var FACEBOOK_APP_ID = process.env.FACEBOOK_APP_ID || config.Facebook_App_ID
+var FACEBOOK_APP_SECRET = process.env.FACEBOOK_APP_SECRET || config.Facebook_App_Secret
+var FACEBOOK_APP_CALLBACK = process.env.FACEBOOK_APP_CALLBACK || config.Facebook_App_CallbackURL
 
 passport.serializeUser(function(user, done) {
   done(null, user);
