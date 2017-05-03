@@ -20,10 +20,11 @@ function initapp (app) {
 	app.get('/logout',getLogout);
 	app.get('/api/user/info',getUserInfo);
 	// app.get('/test', getTest);
-	app.get('/auth/facebook',passport.authenticate('facebook'));
+	app.get('/auth/facebook',passport.authenticate('facebook', { scope: ['email'] }));
 	app.get('/auth/facebook/callback',
 		passport.authenticate('facebook', { failureRedirect: '/login' }), function(req, res) {
-			// Successful authentication, redirect home.
+			// Successful authentication, send token and route to home
+				res.cookie('Snippet', req.user.jwt)
 				res.redirect('/');
 			});
 	app.get('/api/user/getStreams', getStreams);
@@ -42,16 +43,74 @@ var FACEBOOK_APP_ID = config.Facebook_App_ID
 var FACEBOOK_APP_SECRET = config.Facebook_App_Secret
 var FACEBOOK_APP_CALLBACK = config.Facebook_App_CallbackURL
 
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(function(user, done) {
+  done(null, user);
+});
+
 passport.use(new FacebookStrategy({
     clientID: FACEBOOK_APP_ID,
     clientSecret: FACEBOOK_APP_SECRET,
-    callbackURL: FACEBOOK_APP_CALLBACK
+    callbackURL: FACEBOOK_APP_CALLBACK,
+    profileFields: ['id', 'displayName', 'email']
   },
-  function(accessToken, refreshToken, profile, cb) {
-    console.log(accessToken)
-    console.log(refreshToken)
-    console.log(profile)
-    cb(profile)
+  function(accessToken, refreshToken, profile, done) {
+  	// done must return a user profile for verify ** cb(profile) **
+    
+    // attempt to find auth token
+    Auth.findOne({email:profile._json.email, fb_authed:true}, function (err, authdata) {
+    	
+    	if (err || authdata === null){
+    		//token not found, generate new token and user and return jwt in cb
+    		var name = profile._json.name
+			var email = profile._json.email
+			var username = email.split('@')[0]
+    		var newUser = new User({
+				username: username,
+				email: email,
+				name: name
+				// friends: []
+				// stream: []
+			});
+			newUser.save(function(err) {
+				if(err) {
+					// user has registered before
+					console.log(err)
+					done(err)
+				}
+				else {
+					// new user, add auth token and pass to index
+					var newAuth = new Auth({
+						email: email,
+						name: name,
+						fb_authed: true
+					})
+					//generate random password
+					var password = randomstring.generate(63);
+					Auth.createToken(newAuth, password, function(err, token){
+						if (!err) {
+							newJWT = token.generateJwt()
+							done(null,{jwt:newJWT})
+						}
+						else{
+							//token encoutered error
+							done(err)
+						}
+					})
+				}
+			})
+    	}
+
+    	else{
+    		//token found, generate jwt and return in cb
+    		newJWT = authdata.generateJwt()
+			done(null,{jwt:newJWT})
+    	}
+
+    })
   }
 ));
 
@@ -141,7 +200,7 @@ function loginUser(req, res){
 		if (validator.isAlphanumeric(password) &&
 			validator.isEmail(email) && 
 			validator.isLength(password, {min:8, max:64})) {
-			Auth.findOne({email:email}, function (err, authdata) {
+			Auth.findOne({email:email, fb_authed:false}, function (err, authdata) {
 				if (err || authdata === null){
 					//email not found
 					console.log("no email")
@@ -214,7 +273,8 @@ function registerUser(req, res){
 				// new user, add auth token and pass to index
 				var newAuth = new Auth({
 					email: email,
-					name: name
+					name: name,
+					fb_authed: false
 				})
 				Auth.createToken(newAuth, password, function(err, token){
 					if (!err) {

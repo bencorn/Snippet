@@ -4,7 +4,7 @@ var mongoose = require('mongoose');
 
 var crypto = require('crypto');
 var jwt = require('jsonwebtoken');
-var config = {'jwtsecret': "MY_SECRET"}
+var config = require('../../../config/config.json')
 
 var authSchema = new mongoose.Schema({
 	email: {
@@ -17,7 +17,8 @@ var authSchema = new mongoose.Schema({
     required: true
   },
 	hash: String,
-	salt: String
+	salt: String,
+  fb_authed: Boolean
 });
 
 authSchema.methods.validPassword = function(password) {

@@ -29,10 +29,10 @@ angular.module('SnippetMain', []).controller('SnippetMain', function($scope, $ht
 
     // get user info to push to front page
 	vm.getUserInfo = function () {
-		var welcome = ["Hello ", "Hi ", "Hey ", "Whatsup "][Math.floor(Math.random() * 4)]
+		var welcome = ["Hello ", "Hi ", "Hey ", "What's up "][Math.floor(Math.random() * 4)]
 		$http.get('/api/user/info')
 			.then(function (resp) {
-				vm.welcomeMessage = welcome + resp.data.username + '!'
+				vm.welcomeMessage = welcome + resp.data.name + '!'
 			})
 	}
     
