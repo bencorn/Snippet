@@ -11,7 +11,6 @@ angular.module('SnippetMain', []).controller('SnippetMain', function($scope, $ht
         // POST Query to Snippet API
 		$http.post('/api/spotify/search', payload)
 			.then(function (resp) {
-                // Assign VM Property Song Results to resulting JSON
 				vm.SongResults = resp.data;
                 $('.song-results').perfectScrollbar('update');
 			});
@@ -22,9 +21,8 @@ angular.module('SnippetMain', []).controller('SnippetMain', function($scope, $ht
 	    $http.get('/api/user/getStream')
 			.then(function (resp) {
 				vm.userStream = resp.data;
-                $('.my-snippets').perfectScrollbar('update');
 			})
-    }
+    };
 
     // get user info to push to front page
 	vm.getUserInfo = function () {
@@ -33,7 +31,7 @@ angular.module('SnippetMain', []).controller('SnippetMain', function($scope, $ht
 			.then(function (resp) {
 				vm.welcomeMessage = welcome + resp.data.name + '!'
 			})
-	}
+	};
     
 	// Add song to the user's stream
 	vm.addSong = function(song_id) {
@@ -59,14 +57,14 @@ angular.module('SnippetMain', []).controller('SnippetMain', function($scope, $ht
 				vm.getUserStream()
 				vm.getFriendsStreams()
 			});
-	}
+	};
 	
     vm.CreateTriggerEvent = function(){
         $('.list-group-item').click(function(){
             $('.collapse').collapse('hide');
             $(this).children('.collapse').collapse('show');
         }) 
-    }
+    };
     
     vm.SearchUsers = function(){
         var req = {username: vm.FriendQuery};
@@ -77,7 +75,7 @@ angular.module('SnippetMain', []).controller('SnippetMain', function($scope, $ht
 				vm.Users = result.data;
 				vm.getFriendsStreams()
 			});
-    }
+    };
     
     vm.AddFriend = function(email){
         var req = {friend_username: email};
@@ -88,7 +86,7 @@ angular.module('SnippetMain', []).controller('SnippetMain', function($scope, $ht
 				vm.Friends = result.data;
        	 		vm.getFriendsStreams()
 			});
-    }
+    };
 
     // Loading Friend Streams
     vm.getFriendsStreams = function() {
@@ -96,7 +94,7 @@ angular.module('SnippetMain', []).controller('SnippetMain', function($scope, $ht
 			.then(function (resp) {
 				vm.Streams = resp.data;
 			});
-    }
+    };
 
 	$(function () {
         		
@@ -145,7 +143,6 @@ angular.module('SnippetMain', []).controller('SnippetMain', function($scope, $ht
             }
         });
         
-        $('.my-snippets').perfectScrollbar();
         $('.song-results').perfectScrollbar();
 
         // Stop Other Player When New Player Selected
