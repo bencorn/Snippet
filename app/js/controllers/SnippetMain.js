@@ -21,7 +21,6 @@ angular.module('SnippetMain', []).controller('SnippetMain', function($scope, $ht
     vm.getUserStream = function(){
 	    $http.get('/api/user/getStream')
 			.then(function (resp) {
-				console.log(resp.data)
 				vm.userStream = resp.data;
                 $('.my-snippets').perfectScrollbar('update');
 			})
@@ -38,7 +37,6 @@ angular.module('SnippetMain', []).controller('SnippetMain', function($scope, $ht
     
 	// Add song to the user's stream
 	vm.addSong = function(song_id) {
-		console.log(song_id);
 		var req = {song_id: song_id};
 		// POST Query to Snippet API
 		$http.post('/api/user/addSongtoStream', req)
@@ -52,7 +50,6 @@ angular.module('SnippetMain', []).controller('SnippetMain', function($scope, $ht
 
 	// remove song from the user's stream
 	vm.removeSong = function(song_id) {
-		console.log(song_id);
 		var req = {song_id: song_id};
 		// POST Query to Snippet API
 		$http.post('/api/user/removeSongfromStream', req)
