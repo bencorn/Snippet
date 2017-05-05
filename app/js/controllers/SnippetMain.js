@@ -42,7 +42,6 @@ angular.module('SnippetMain', []).controller('SnippetMain', function ($scope, $h
         $http.post('/api/user/addSongtoStream', req)
             .then(function (result) {
                 // Assign VM property Song results to resulting JSON
-                vm.userStream = result.data;
                 vm.getUserStream()
                 vm.getFriendsStreams()
             });
@@ -57,7 +56,6 @@ angular.module('SnippetMain', []).controller('SnippetMain', function ($scope, $h
         $http.post('/api/user/removeSongfromStream', req)
             .then(function (result) {
                 // Assign VM property Song results to resulting JSON
-                vm.userStream = result.data;
                 vm.getUserStream()
                 vm.getFriendsStreams()
             });

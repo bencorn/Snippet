@@ -20,15 +20,16 @@
 </head>
 
 <body ng-app="snippetApp" ng-controller="SnippetMain as vm">
+
+
+
     <div id="fullpage">
-        <section class="vertical-scrolling">
+        <section class="vertical-scrolling">  
             <div class="horizontal-scrolling snippet">
                 <div class="container">
                     <div class="row">
                         <div style="margin-top: 4em;" class="col-sm-12">
-
                             <h1 style="font-family: 'Arial' sans-serif; font-size: 5em; color: #ffffff;">{{vm.welcomeMessage}}</h1>
-
                             <div ng-show="vm.Streams.length" class="followed-streams">
                                 <h4 style="font-weight: 100; color: white; margin-top: 0.2em;">
                                     Followed Streams
@@ -54,274 +55,274 @@
                                                     </div>
                                                     <div class="ml-auto p-2">
                                                         <audio style="width: 64px;" controls>
-                                        <source ng-src="{{s.preview_url | trustAudioSrc}}" type="audio/mpeg">
-                                            Your browser does not support the audio element.
-                                        </audio>
-                                                    </div>
-                                                    <div class="p-2">
-                                                        <div class="dropdown">
-                                                            <button ng-click="vm.addSong(s.id)" data-toggle="dropdown" class="btn btn-outline-primary btn-circle">
-                                                <i class="fa fa-plus" aria-hidden="true"></i>
-                                            </button>
+                                                            <source ng-src="{{s.preview_url | trustAudioSrc}}" type="audio/mpeg">
+                                                                Your browser does not support the audio element.
+                                                            </audio>
                                                         </div>
-                                                    </div>
-                                                </a>
+                                                        <div class="p-2">
+                                                            <div class="dropdown">
+                                                                <button ng-click="vm.addSong(s.id)" data-toggle="dropdown" class="btn btn-outline-primary btn-circle">
+                                                                    <i class="fa fa-plus" aria-hidden="true"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div ng-hide="vm.Streams.length">
+                                    <h4 style="font-weight: 100; color: white; margin-top: 0.2em;">
+                                        Aw, it looks like there are no streams to show right now!
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="horizontal-scrolling snip">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="row">
+                                    <div style="margin-top: 4em;" class="col-sm-12">
+                                        <h4 style="font-weight: 100; color: white;">Snip</h4>
+                                        <form>
+                                            <div class="form-group spotify-search">
+                                                <input type="text" class="form-control song-search" ng-model="vm.SearchQuery" />
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="row" ng-show="vm.SongResults">
+                                <div style="margin-top:1em; margin-bottom: 2em;" class="song-results results-table col-sm-12">
+                                        <table class="table table-borderless">
+                                            <thead>
+                                                <tr style="color: white;">
+                                                    <th></th>
+                                                    <th style="width: 25%;">TITLE</th>
+                                                    <th style="width: 25%;">ARTIST</th>
+                                                    <th>PREVIEW</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr ng-repeat="song in vm.SongResults.tracks.items | limitTo: 20">
+                                                    <th scope="row">
+                                                        <img style="max-width: 20%" class="img-circle" ng-src="{{song.album.images[0].url | trustAudioSrc}}" alt="Album Title">
+                                                    </th>
+                                                    <td>{{song.name}}</td>
+                                                    <td>{{song.artists[0].name}}</td>
+                                                    <td> <audio style="width: 64px;" controls>
+                                                        <source ng-src="{{song.preview_url | trustAudioSrc}}" type="audio/mpeg">
+                                                            Your browser does not support the audio element.
+                                                        </audio>
+                                                    </td>
+                                                    <td>
+                                                        <button style="color: #ffffff; border-color: #ffffff;" ng-click="vm.addSong(song.id)" data-toggle="dropdown" class="btn btn-outline-primary btn-circle">
+                                                            <i class="fa fa-plus" aria-hidden="true"></i>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 4em;" class="col-sm-6">
+                                    <h4 ng-if="vm.userStream.tracks" style="font-weight: 100; color: white;">Your Snippets</h4>
+                                    <div class="row" ng-show="vm.userStream.tracks">
+                                        <div style="margin-top:1em; margin-bottom: 2em;" class="my-snippets results-table col-sm-12">
+                                            <table class="table table-borderless">
+                                                <tbody>
+                                                    <tr ng-repeat="song in vm.userStream.tracks">
+                                                        <th scope="row">
+                                                            <img style="max-width: 17%" class="img-circle" ng-src="{{song.album.images[0].url | trustAudioSrc}}" alt="Album Title">
+                                                        </th>
+                                                        <td style="width: 25%;">{{song.name}}</td>
+                                                        <td style="width: 25%;">{{song.artists[0].name}}</td>
+                                                        <td>
+                                                            <audio style="width: 64px;" controls>
+                                                                <source ng-src="{{song.preview_url | trustAudioSrc}}" type="audio/mpeg">
+                                                                    Your browser does not support the audio element.
+                                                                </audio>
+                                                            </td>
+                                                            <td>
+                                                                <button style="color: #ffffff; border-color: #ffffff;" ng-click="vm.removeSong(song.id)" class="btn btn-outline-primary btn-circle">
+                                                                    <i class="fa fa-minus" aria-hidden="true"></i>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
                                             </div>
                                         </div>
-                                    </ul>
+                                    </div>
                                 </div>
                             </div>
-                            <div ng-hide="vm.Streams.length">
-                                <h4 style="font-weight: 100; color: white; margin-top: 0.2em;">
-                                    Aw, it looks like there are no streams to show right now!
-                                </h4>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="horizontal-scrolling snip">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="row">
-                                <div style="margin-top: 4em;" class="col-sm-12">
-                                    <h4 style="font-weight: 100; color: white;">Snip</h4>
-                                    <form>
-                                        <div class="form-group spotify-search">
-                                            <input type="text" class="form-control song-search" ng-model="vm.SearchQuery" />
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                            <div class="row" ng-show="vm.SongResults">
-                                <div style="margin-top:1em; min-height: 10em; max-height: 25em;" class="song-results results-table col-sm-12">
-                                    <table class="table table-borderless">
-                                        <thead>
-                                            <tr style="color: white;">
-                                                <th></th>
-                                                <th style="width: 25%;">TITLE</th>
-                                                <th style="width: 25%;">ARTIST</th>
-                                                <th>PREVIEW</th>
-                                                <th></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr ng-repeat="song in vm.SongResults.tracks.items | limitTo: 20">
-                                                <th scope="row">
-                                                    <img style="max-width: 20%" class="img-circle" ng-src="{{song.album.images[0].url | trustAudioSrc}}" alt="Album Title">
-                                                </th>
-                                                <td>{{song.name}}</td>
-                                                <td>{{song.artists[0].name}}</td>
-                                                <td>
-                                                    <audio style="width: 64px;" controls>
-                                    <source ng-src="{{song.preview_url | trustAudioSrc}}" type="audio/mpeg">
-                                        Your browser does not support the audio element.
-                                    </audio>
-                                                </td>
-                                                <td>
-                                                    <button style="color: #ffffff; border-color: #ffffff;" ng-click="vm.addSong(song.id)" data-toggle="dropdown" class="btn btn-outline-primary btn-circle">
-                                      <i class="fa fa-plus" aria-hidden="true"></i>
-                                  </td>
-                              </tr>
-                          </tbody>
-                      </table>
-                  </div>
-              </div>
-        </div>
-        <div style="margin-top: 4em;" class="col-sm-6">
-            <h4 ng-if="vm.userStream.tracks" style="font-weight: 100; color: white;">Your Snippets</h4>
-            <div class="row" ng-show="vm.userStream.tracks">
-                <div style="margin-top:1em; max-height: 30em; overflow-y: auto;" class="my-snippets results-table col-sm-12">
-                    <table class="table table-borderless">
-                        <tbody>
-                            <tr ng-repeat="song in vm.userStream.tracks">
-                                <th scope="row">
-                                    <img style="max-width: 17%" class="img-circle" ng-src="{{song.album.images[0].url | trustAudioSrc}}" alt="Album Title">
-                                </th>
-                                <td style="width: 25%;">{{song.name}}</td>
-                                <td style="width: 25%;">{{song.artists[0].name}}</td>
-                                <td>
-                                    <audio style="width: 64px;" controls>
-                                        <source ng-src="{{song.preview_url | trustAudioSrc}}" type="audio/mpeg">
-                                            Your browser does not support the audio element.
-                                        </audio>
-                                    </td>
-                                    <td>
-                                        <button style="color: #ffffff; border-color: #ffffff;" ng-click="vm.removeSong(song.id)" data-toggle="dropdown" class="btn btn-outline-primary btn-circle">
-                                            <i class="fa fa-minus" aria-hidden="true"></i>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-            </div>
-            </div>
-        </div>
-      </div>
-      <div class="horizontal-scrolling explore">
-         <div class="container">
-            <div class="row">         
-               <div style="margin-top: 4em;" class="col-sm-12">
-                  <h4 style="font-weight: 100; color: white;">Follow Snippers</h4>
-                  <form>
-                    <div class="form-group friend-search">
-                        <input placeholder="Enter a name, username or email" type="text" class="form-control friend-search" ng-model="vm.FriendQuery" />
-                    </div>
-                </form>
-                <br>
-                <div ng-show="vm.Users.length" style="max-height: 100%; overflow: auto;" class="card">
-                    <ul id="accordian" class="list-group">
-                     <div ng-repeat="User in vm.Users">
-                        <li class="list-group-item">
-                            <div class="snippet-details p-2">
-                                <span class="lead">{{User.name}}</span><br>
-                                <span class="text-muted">{{User.email}}</span>
-                            </div>                                   
-                            <div class="ml-auto p-2">
-                                <div class="dropdown">
-                                    <button ng-if="User.isFriend == undefined" ng-click="vm.AddFriend(User.email); User.isFriend = true;" data-toggle="dropdown" class="btn btn-outline-primary btn-circle">
-                                        <i  class="fa fa-user-plus" aria-hidden="true"></i>
-                                    </button>
+                            <div class="horizontal-scrolling explore">
+                               <div class="container">
+                                <div class="row">         
+                                 <div style="margin-top: 4em;" class="col-sm-12">
+                                  <h4 style="font-weight: 100; color: white;">Follow Snippers</h4>
+                                  <form>
+                                    <div class="form-group friend-search">
+                                        <input placeholder="Enter a name, username or email" type="text" class="form-control friend-search" ng-model="vm.FriendQuery" />
+                                    </div>
+                                </form>
+                                <br>
+                                <div ng-show="vm.Users.length" style="max-height: 100%; overflow: auto;" class="card">
+                                    <ul id="accordian" class="list-group">
+                                       <div ng-repeat="User in vm.Users">
+                                        <li class="list-group-item">
+                                            <div class="snippet-details p-2">
+                                                <span class="lead">{{User.name}}</span><br>
+                                                <span class="text-muted">{{User.email}}</span>
+                                            </div>                                   
+                                            <div class="ml-auto p-2">
+                                                <div class="dropdown">
+                                                    <button ng-if="User.isFriend == undefined" ng-click="vm.AddFriend(User.email); User.isFriend = true;" data-toggle="dropdown" class="btn btn-outline-primary btn-circle">
+                                                        <i  class="fa fa-user-plus" aria-hidden="true"></i>
+                                                    </button>
                                                     <i style="color: #0275d8; font-size: 2em;" ng-if="User.isFriend == true" class="fa fa-check-circle-o" aria-hidden="true"></i>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </div>
+                                </ul>
+                            </div>
+                            <div ng-show="vm.Users != undefined && !vm.Users.length">
+                                <h1 style="font-weight: 100; color: white;">
+                                    Oops... we couldn't find any users :(</h1>
                                 </div>
                             </div>
-                            </li>
                         </div>
-                        </ul>
-                    </div>
-                    <div ng-show="vm.Users != undefined && !vm.Users.length">
-                        <h1 style="font-weight: 100; color: white;">
-                            Oops... we couldn't find any users :(</h1>
                     </div>
                 </div>
-            </div>
-    </div>
-    </div>
-    </section>
-    </div>
+            </section>
+        </div>
 
-    <style class="ng-scope">
-        å .btn-circle {
-            width: 30px;
-            height: 30px;
-            text-align: center;
-            padding: 6px 0;
-            font-size: 12px;
-            line-height: 1.428571429;
-            border-radius: 15px;
-        }
-        
-        .stream-item {
-            background-color: #fafafa;
-        }
-        
-        .stream-dropdown {
-            top: -27px !important;
-            left: -143px !important;
-            border-radius: 0 !important;
-        }
-        
-        .my-snippets {
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .song-results {
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .table-borderless>tfoot>tr>td,
-        .table-borderless>tfoot>tr>th {
-            border: none !important;
-        }
-        
-        .table-borderless>tbody>tr>td,
-        .table-borderless>tbody>tr>th,
-        .table-borderless>thead>tr>td,
-        .table-borderless>thead>tr>th {
-            border-color: rgba(255, 255, 255, .6);
-        }
-        
-        .snippet {
-            background: #c0392b;
-            /* fallback for old browsers */
-            background: -webkit-linear-gradient(to top, #8e44ad, #c0392b);
-            /* Chrome 10-25, Safari 5.1-6 */
-            background: linear-gradient(to top, #8e44ad, #c0392b);
-            /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-        }
-        
-        .snip {
-            background: #C33764;
-            /* fallback for old browsers */
-            background: -webkit-linear-gradient(to top, #1D2671, #C33764);
-            /* Chrome 10-25, Safari 5.1-6 */
-            background: linear-gradient(to top, #1D2671, #C33764);
-            /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-        }
-        
-        .explore {
-            background: #F3904F;
-            /* fallback for old browsers */
-            background: -webkit-linear-gradient(to top, #3B4371, #F3904F);
-            /* Chrome 10-25, Safari 5.1-6 */
-            background: linear-gradient(to top, #3B4371, #F3904F);
-            /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-        }
-        
-        th {
-            letter-spacing: .1em;
-            font-weight: 100;
-        }
-        
-        tr {
-            color: white;
-        }
-        
-        .img-circle {
-            border-radius: 50%;
-        }
-        
-        .snippet-details {
-            padding-left: 1em;
-        }
-        
-        .navbar {
-            margin-bottom: 0;
-        }
-        
-        .open-stack-login {
-            margin-top: 1em;
-        }
-        
-        .spotify-search {
-            margin-top: 1em;
-        }
-        
-        .jumbotron {
-            padding-top: 6rem;
-            padding-bottom: 6rem;
-            margin-bottom: 0;
-            background-color: #fff;
-        }
-        
-        .jumbotron p:last-child {
-            margin-bottom: 0;
-        }
-        
-        .jumbotron-heading {
-            font-weight: 300;
-        }
-        
-        .jumbotron .container {
-            max-width: 40rem;
-        }
+        <style class="ng-scope">
+            å .btn-circle {
+                width: 30px;
+                height: 30px;
+                text-align: center;
+                padding: 6px 0;
+                font-size: 12px;
+                line-height: 1.428571429;
+                border-radius: 15px;
+            }
 
-    </style>
+            .stream-item {
+                background-color: #fafafa;
+            }
 
-</body>
+            .stream-dropdown {
+                top: -27px !important;
+                left: -143px !important;
+                border-radius: 0 !important;
+            }
 
-</html>
+            .my-snippets {
+                position: relative;
+                overflow: hidden;
+            }
+
+            .song-results {
+                position: relative;
+                overflow: hidden;
+            }
+
+            .table-borderless>tfoot>tr>td,
+            .table-borderless>tfoot>tr>th {
+                border: none !important;
+            }
+
+            .table-borderless>tbody>tr>td,
+            .table-borderless>tbody>tr>th,
+            .table-borderless>thead>tr>td,
+            .table-borderless>thead>tr>th {
+                border-color: rgba(255, 255, 255, .6);
+            }
+
+            .snippet {
+                background: #c0392b;
+                /* fallback for old browsers */
+                background: -webkit-linear-gradient(to top, #8e44ad, #c0392b);
+                /* Chrome 10-25, Safari 5.1-6 */
+                background: linear-gradient(to top, #8e44ad, #c0392b);
+                /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+            }
+
+            .snip {
+                background: #C33764;
+                /* fallback for old browsers */
+                background: -webkit-linear-gradient(to top, #1D2671, #C33764);
+                /* Chrome 10-25, Safari 5.1-6 */
+                background: linear-gradient(to top, #1D2671, #C33764);
+                /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+            }
+
+            .explore {
+                background: #F3904F;
+                /* fallback for old browsers */
+                background: -webkit-linear-gradient(to top, #3B4371, #F3904F);
+                /* Chrome 10-25, Safari 5.1-6 */
+                background: linear-gradient(to top, #3B4371, #F3904F);
+                /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+            }
+
+            th {
+                letter-spacing: .1em;
+                font-weight: 100;
+            }
+
+            tr {
+                color: white;
+            }
+
+            .img-circle {
+                border-radius: 50%;
+            }
+
+            .snippet-details {
+                padding-left: 1em;
+            }
+
+            .navbar {
+                margin-bottom: 0;
+                background: none;
+            }
+
+            .open-stack-login {
+                margin-top: 1em;
+            }
+
+            .spotify-search {
+                margin-top: 1em;
+            }
+
+            .jumbotron {
+                padding-top: 6rem;
+                padding-bottom: 6rem;
+                margin-bottom: 0;
+                background-color: #fff;
+            }
+
+            .jumbotron p:last-child {
+                margin-bottom: 0;
+            }
+
+            .jumbotron-heading {
+                font-weight: 300;
+            }
+
+            .jumbotron .container {
+                max-width: 40rem;
+            }
+
+        </style>
+
+    </body>
+
+    </html>

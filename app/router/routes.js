@@ -495,13 +495,21 @@ function getStream(req, res) {
             res.redirect('/login')
         } else {
             // token valid, send stream
-            var SpotifyWebApi = require('spotify-web-api-node')
-            // credentials are optional
-            var spotifyApi = new SpotifyWebApi();
-            spotifyApi.getTracks(userdata.stream)
-                .then(function (data) {
-                    res.json(data.body);
-                }, function (err) {});
+
+            if (userdata.stream.length > 0) {
+
+	            var SpotifyWebApi = require('spotify-web-api-node')
+	            // credentials are optional
+	            var spotifyApi = new SpotifyWebApi();
+	            spotifyApi.getTracks(userdata.stream)
+	                .then(function (data) {
+	                    res.json(data.body);
+	                }, function (err) {});
+
+            }
+            else{
+            	res.json({})
+            }
         }
     })
 }
