@@ -620,7 +620,7 @@ function addSongtoStream(req, res) {
             var email = userdata.email
             var new_stream = userdata.stream
             if (!new_stream.includes(req_song)) {
-                new_stream.push(req_song)
+                new_stream.unshift(req_song)
             }
             User.findOneAndUpdate({
                 email: email

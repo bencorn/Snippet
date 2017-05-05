@@ -34,7 +34,7 @@
                                 <h4 style="font-weight: 100; color: white; margin-top: 0.2em;">
                                     Followed Streams
                                 </h4>
-                                <div style="max-height: 100%; overflow: auto;" class="card">
+                                <div style="max-height: 70vh; overflow: auto;" class="card">
                                     <ul id="accordian" class="list-group">
                                         <div ng-repeat="stream in vm.Streams" ng-init="$last && vm.CreateTriggerEvent()">
                                             <li data-toggle="collapse" data-target="{{'#' + stream.username}}" class="list-group-item stream">
@@ -87,7 +87,7 @@
                             <div class="col-sm-6">
                                 <div class="row">
                                     <div style="margin-top: 4em;" class="col-sm-12">
-                                        <h4 style="font-weight: 100; color: white;">Snip</h4>
+                                        <h3 style="font-weight: 100; color: white;">Search and Snip Songs</h3>
                                         <form>
                                             <div class="form-group spotify-search">
                                                 <input type="text" class="form-control song-search" ng-model="vm.SearchQuery" />
@@ -95,8 +95,8 @@
                                         </form>
                                     </div>
                                 </div>
-                                <div class="row" ng-show="vm.SongResults">
-                                <div style="margin-top:1em; margin-bottom: 2em;" class="song-results results-table col-sm-12">
+                                <div class="row" style="max-height: 70vh" ng-show="vm.SongResults">
+                                    <div class="song-results results-table col-sm-12">
                                         <table class="table table-borderless">
                                             <thead>
                                                 <tr style="color: white;">
@@ -130,9 +130,9 @@
                                     </div>
                                 </div>
                                 <div style="margin-top: 4em;" class="col-sm-6">
-                                    <h4 ng-if="vm.userStream.tracks" style="font-weight: 100; color: white;">Your Snippets</h4>
-                                    <div class="row" ng-show="vm.userStream.tracks">
-                                        <div style="margin-top:1em; margin-bottom: 2em;" class="my-snippets results-table col-sm-12">
+                                    <h3 style="font-weight: 100; color: white;">Your Snippets</h3>
+                                    <div class="row" style="max-height: 70vh" ng-show="vm.userStream.tracks">
+                                        <div class="my-snippets results-table col-sm-12">
                                             <table class="table table-borderless">
                                                 <tbody>
                                                     <tr ng-repeat="song in vm.userStream.tracks">
@@ -156,6 +156,11 @@
                                                     </table>
                                                 </div>
                                             </div>
+                                            <div ng-hide="vm.userStream.tracks">
+                                                <h5 style="font-weight: 100; color: white; margin-top: 1em;">
+                                                    No new music to share? Try snipping a song!
+                                                </h5>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -164,14 +169,14 @@
                                <div class="container">
                                 <div class="row">         
                                  <div style="margin-top: 4em;" class="col-sm-12">
-                                  <h4 style="font-weight: 100; color: white;">Follow Snippers</h4>
+                                  <h3 style="font-weight: 100; color: white;">Find and Follow Snippers</h3>
                                   <form>
                                     <div class="form-group friend-search">
                                         <input placeholder="Enter a name, username or email" type="text" class="form-control friend-search" ng-model="vm.FriendQuery" />
                                     </div>
                                 </form>
                                 <br>
-                                <div ng-show="vm.Users.length" style="max-height: 100%; overflow: auto;" class="card">
+                                <div ng-show="vm.Users.length" style="max-height: 70vh; overflow: scroll;" class="card">
                                     <ul id="accordian" class="list-group">
                                        <div ng-repeat="User in vm.Users">
                                         <li class="list-group-item">
@@ -192,8 +197,8 @@
                                 </ul>
                             </div>
                             <div ng-show="vm.Users != undefined && !vm.Users.length">
-                                <h1 style="font-weight: 100; color: white;">
-                                    Oops... we couldn't find any users :(</h1>
+                                <h4 style="font-weight: 100; color: white;">
+                                    Oops... we couldn't find any users :(</h4>
                                 </div>
                             </div>
                         </div>
@@ -203,7 +208,7 @@
         </div>
 
         <style class="ng-scope">
-            å .btn-circle {
+            .btn-circle {
                 width: 30px;
                 height: 30px;
                 text-align: center;
@@ -223,14 +228,19 @@
                 border-radius: 0 !important;
             }
 
-            .my-snippets {
-                position: relative;
-                overflow: hidden;
-            }
-
             .song-results {
                 position: relative;
-                overflow: hidden;
+                overflow: scroll;
+                margin-top:1em;
+                margin-bottom: 3em;
+            }
+
+
+            .my-snippets {
+                position: relative;
+                overflow: scroll;
+                margin-top:1em;
+                margin-bottom: 3em;
             }
 
             .table-borderless>tfoot>tr>td,
