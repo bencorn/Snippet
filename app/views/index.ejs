@@ -171,7 +171,7 @@
                     </div>
                 </form>
                 <br>
-                <div ng-show="vm.Users" style="max-height: 100%; overflow: auto;" class="card">
+                <div ng-show="vm.Users.length" style="max-height: 100%; overflow: auto;" class="card">
                     <ul id="accordian" class="list-group">
                      <div ng-repeat="User in vm.Users">
                         <li class="list-group-item">
@@ -181,14 +181,19 @@
                             </div>                                   
                             <div class="ml-auto p-2">
                                 <div class="dropdown">
-                                    <button ng-click="vm.AddFriend(User.email)" data-toggle="dropdown" class="btn btn-outline-primary btn-circle">
-                                        <i class="fa fa-user-plus" aria-hidden="true"></i>
+                                    <button ng-if="User.isFriend == undefined" ng-click="vm.AddFriend(User.email); User.isFriend = true;" data-toggle="dropdown" class="btn btn-outline-primary btn-circle">
+                                        <i  class="fa fa-user-plus" aria-hidden="true"></i>
                                     </button>
+                                                    <i style="color: #0275d8; font-size: 2em;" ng-if="User.isFriend == true" class="fa fa-check-circle-o" aria-hidden="true"></i>
                                 </div>
                             </div>
                             </li>
                         </div>
                         </ul>
+                    </div>
+                    <div ng-show="vm.Users != undefined && !vm.Users.length">
+                        <h1 style="font-weight: 100; color: white;">
+                            Oops... we couldn't find any users :(</h1>
                     </div>
                 </div>
             </div>
