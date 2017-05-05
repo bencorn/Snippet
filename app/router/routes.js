@@ -361,18 +361,18 @@ function getLogout(req, res) {
 }
 
 function getLogin(req, res) {
-    // var token = req.cookies.Snippet
-    // verifyToken(token, function(err, userdata) {
-    // 	if(err) {
-    // 		// token invalid, send to login
-    // 		res.render('login.ejs')
-    // 	}
-    // 	else{
-    // 		// valid token, go to index instead
-    // 		res.redirect('/')
-    // 	}
-    // })
-    res.render('login.ejs')
+    var token = req.cookies.Snippet
+    verifyToken(token, function(err, userdata) {
+    	if(err) {
+    		// token invalid, send to login
+    		res.render('login.ejs')
+    	}
+    	else{
+    		// valid token, go to index instead
+    		res.redirect('/')
+    	}
+    })
+    // res.render('login.ejs')
 
 }
 

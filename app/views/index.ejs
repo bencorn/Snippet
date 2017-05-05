@@ -21,15 +21,22 @@
 
 <body ng-app="snippetApp" ng-controller="SnippetMain as vm">
 
-
+<nav style="background: none; position: fixed; z-index: 9; padding-top: 1em; padding-left: 2em; padding-right: 2em; width: 100%">
+    <h3 style="font-family: 'Arial' sans-serif; color: #ffffff; display: inline;">{{vm.welcomeMessage}}</h3>
+    <div class="nav-center">
+        <button><a href="#home/snippet"> check out streams </a></button>
+        <button><a href="#home/snips"> search and snip your own stream</a></button>
+        <button><a href="#home/explore"> find and follow new snippers </a></button>
+        <button style="float: right;"><a href="/logout"> log out (for now) </a></button>
+    </div>
+</nav>
 
     <div id="fullpage">
-        <section class="vertical-scrolling">  
-            <div class="horizontal-scrolling snippet">
+        <section class="vertical-scrolling" data-anchor="home">  
+            <div class="horizontal-scrolling snippet" data-anchor="snippet">
                 <div class="container">
                     <div class="row">
                         <div style="margin-top: 4em;" class="col-sm-12">
-                            <h1 style="font-family: 'Arial' sans-serif; font-size: 5em; color: #ffffff;">{{vm.welcomeMessage}}</h1>
                             <div ng-show="vm.Streams.length" class="followed-streams">
                                 <h4 style="font-weight: 100; color: white; margin-top: 0.2em;">
                                     Followed Streams
@@ -81,7 +88,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="horizontal-scrolling snip">
+                <div class="horizontal-scrolling snip" data-anchor="snips">
                     <div class="container">
                         <div class="row">
                             <div class="col-sm-6">
@@ -165,7 +172,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="horizontal-scrolling explore">
+                            <div class="horizontal-scrolling explore" data-anchor="explore">
                                <div class="container">
                                 <div class="row">         
                                  <div style="margin-top: 4em;" class="col-sm-12">
@@ -299,11 +306,6 @@
                 padding-left: 1em;
             }
 
-            .navbar {
-                margin-bottom: 0;
-                background: none;
-            }
-
             .open-stack-login {
                 margin-top: 1em;
             }
@@ -329,6 +331,30 @@
 
             .jumbotron .container {
                 max-width: 40rem;
+            }
+
+            .nav-center {
+                display: inline-block;
+                margin-left: 2em;
+                margin-right: 2em;
+                float: right;
+                transition: all 0.5s;
+            }
+
+            .nav-center button{
+                border:none;
+                background: none;
+            }
+
+            .nav-center a {
+                font-family: 'Arial' sans-serif; 
+                color: #ffffff;
+                margin-left: 1em;
+            }
+
+            .nav-center a:hover {
+                text-decoration: none;
+                color: #f00fff;
             }
 
         </style>
